@@ -1,0 +1,20 @@
+{
+  "name": "automate-test",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check:device": "node tools/check-device.mjs",
+    "check:ids": "node tools/check-ids.mjs",
+    "appium": "appium"
+  },
+  "devDependencies": {
+    "appium": "^3.0.0",
+    "webdriverio": "^9.0.0",
+    "shared-element-ids": "git+https://github.com/ChanonChaisakdanukool/IDFile.git#6f55f2c64310736cc03dda0028f3ff96a911a3e5"
+  }
+}

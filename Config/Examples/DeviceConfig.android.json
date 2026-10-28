@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "profileName": "dev-android-emulator",
+  "platform": "Android",
+  "device": {
+    "type": "emulator",
+    "id": "REPLACE_WITH_DEVICE_SERIAL"
+  },
+  "app": {
+    "source": "installed",
+    "appPackage": "REPLACE_WITH_APP_PACKAGE"
+  }
+}

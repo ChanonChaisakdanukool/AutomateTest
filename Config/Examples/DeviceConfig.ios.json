@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "profileName": "dev-ios-simulator",
+  "platform": "iOS",
+  "device": {
+    "type": "simulator",
+    "id": "REPLACE_WITH_SIMULATOR_UDID"
+  },
+  "app": {
+    "source": "installed",
+    "bundleId": "REPLACE_WITH_BUNDLE_ID"
+  }
+}

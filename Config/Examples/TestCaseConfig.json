@@ -1,0 +1,12 @@
+{
+  "runName": "FirstSmoke",
+  "shouldContinueNextCaseWhenFail": false,
+  "testCases": [
+    {
+      "case": {
+        "id": "REPLACE_WITH_REGISTERED_CASE_ID",
+        "additionalData": {}
+      }
+    }
+  ]
+}
