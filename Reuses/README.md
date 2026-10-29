@@ -1,2 +1,3 @@
 # Reuses
-Flow ร่วม เช่น Login ประกอบจาก Pages ยังไม่สร้าง Flow จนกว่าจะรู้ Preconditions และ UI จริง
+
+พื้นที่สำหรับ flow ร่วมในอนาคต ขณะนี้ Login เป็น Test Scripts ใน Scripts/Login และใช้ Page Actions ร่วมกัน

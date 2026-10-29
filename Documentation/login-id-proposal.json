@@ -1,0 +1,1057 @@
+{
+  "status": "proposal-not-bound",
+  "platform": "iOS",
+  "sourceCommit": "e81a94a102",
+  "elements": [
+    {
+      "id": "loginPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 17,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "loginPage"
+    },
+    {
+      "id": "loginPagePhoneTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 19,
+      "outlet": "phoneTextField",
+      "group": "loginPage"
+    },
+    {
+      "id": "loginPageSignInFaceBookButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 20,
+      "outlet": "signInFaceBookButton",
+      "group": "loginPage"
+    },
+    {
+      "id": "loginPageSignInGoogleButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 21,
+      "outlet": "signInGoogleButton",
+      "group": "loginPage"
+    },
+    {
+      "id": "loginPageSignInAppleButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 22,
+      "outlet": "signInAppleButton",
+      "group": "loginPage"
+    },
+    {
+      "id": "loginPageSignInEmailButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 23,
+      "outlet": "signInEmailButton",
+      "group": "loginPage"
+    },
+    {
+      "id": "loginPageLoginButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 24,
+      "outlet": "loginButton",
+      "group": "loginPage"
+    },
+    {
+      "id": "loginPageSkipButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 25,
+      "outlet": "skipButton",
+      "group": "loginPage"
+    },
+    {
+      "id": "loginPagePhoneAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 27,
+      "outlet": "phoneAlertLabel",
+      "group": "loginPage"
+    },
+    {
+      "id": "loginPageScrollView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 28,
+      "outlet": "scrollView",
+      "group": "loginPage"
+    },
+    {
+      "id": "loginPagePrivacyNoticeButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Landing/LoginLandingViewController.swift",
+      "line": 30,
+      "outlet": "privacyNoticeButton",
+      "group": "loginPage"
+    },
+    {
+      "id": "latestLoginPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 17,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageBackButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 19,
+      "outlet": "backButton",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageLatestLoginUserNameLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 21,
+      "outlet": "latestLoginUserNameLabel",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageLatestLoginUserEmailLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 22,
+      "outlet": "latestLoginUserEmailLabel",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageLatestLoginLoginButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 24,
+      "outlet": "latestLoginLoginButton",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageLatestLoginProviderNameLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 26,
+      "outlet": "latestLoginProviderNameLabel",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageLatestLoginPreviousLoginButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 27,
+      "outlet": "latestLoginPreviousLoginButton",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageLatestLoginNormalLoginButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 28,
+      "outlet": "latestLoginNormalLoginButton",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageBottomSheetView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 31,
+      "outlet": "bottomSheetView",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageSheetFacebookLoginButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 35,
+      "outlet": "sheetFacebookLoginButton",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageSheetGoogleLoginButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 36,
+      "outlet": "sheetGoogleLoginButton",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageSheetAppleLoginButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 37,
+      "outlet": "sheetAppleLoginButton",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageSheetEmailLoginButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 38,
+      "outlet": "sheetEmailLoginButton",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageSheetPhoneLoginButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 39,
+      "outlet": "sheetPhoneLoginButton",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "latestLoginPageBottomSheetCancelButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LatestLoginLanding/LatestLoginLandingViewController.swift",
+      "line": 40,
+      "outlet": "bottomSheetCancelButton",
+      "group": "latestLoginPage"
+    },
+    {
+      "id": "loginEmailPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LoginEmail/LoginEmailViewController.swift",
+      "line": 24,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "loginEmailPage"
+    },
+    {
+      "id": "loginEmailPageEmailTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LoginEmail/LoginEmailViewController.swift",
+      "line": 26,
+      "outlet": "emailTextField",
+      "group": "loginEmailPage"
+    },
+    {
+      "id": "loginEmailPagePasswordTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LoginEmail/LoginEmailViewController.swift",
+      "line": 27,
+      "outlet": "passwordTextField",
+      "group": "loginEmailPage"
+    },
+    {
+      "id": "loginEmailPageRegisterButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LoginEmail/LoginEmailViewController.swift",
+      "line": 28,
+      "outlet": "registerButton",
+      "group": "loginEmailPage"
+    },
+    {
+      "id": "loginEmailPageForgotPasswordButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LoginEmail/LoginEmailViewController.swift",
+      "line": 29,
+      "outlet": "forgotPasswordButton",
+      "group": "loginEmailPage"
+    },
+    {
+      "id": "loginEmailPageLoginButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LoginEmail/LoginEmailViewController.swift",
+      "line": 30,
+      "outlet": "loginButton",
+      "group": "loginEmailPage"
+    },
+    {
+      "id": "loginEmailPageEmailAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LoginEmail/LoginEmailViewController.swift",
+      "line": 32,
+      "outlet": "emailAlertLebel",
+      "group": "loginEmailPage"
+    },
+    {
+      "id": "loginEmailPagePasswordAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LoginEmail/LoginEmailViewController.swift",
+      "line": 34,
+      "outlet": "passwordAlertLebel",
+      "group": "loginEmailPage"
+    },
+    {
+      "id": "loginEmailPageLoginFailAlert",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/LoginEmail/LoginEmailViewController.swift",
+      "line": 35,
+      "outlet": "loginFailAlert",
+      "group": "loginEmailPage"
+    },
+    {
+      "id": "loginPhoneOtpPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SignInWithPhone/PhoneSignInOTPViewController.swift",
+      "line": 10,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "loginPhoneOtpPage"
+    },
+    {
+      "id": "loginPhoneOtpPageBackButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SignInWithPhone/PhoneSignInOTPViewController.swift",
+      "line": 13,
+      "outlet": "backButton",
+      "group": "loginPhoneOtpPage"
+    },
+    {
+      "id": "loginPhoneOtpPageMobileNoLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SignInWithPhone/PhoneSignInOTPViewController.swift",
+      "line": 14,
+      "outlet": "mobileNoLabel",
+      "group": "loginPhoneOtpPage"
+    },
+    {
+      "id": "loginPhoneOtpPageOtpRefLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SignInWithPhone/PhoneSignInOTPViewController.swift",
+      "line": 15,
+      "outlet": "otpRefLabel",
+      "group": "loginPhoneOtpPage"
+    },
+    {
+      "id": "loginPhoneOtpPageOtpTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SignInWithPhone/PhoneSignInOTPViewController.swift",
+      "line": 16,
+      "outlet": "otpTextField",
+      "group": "loginPhoneOtpPage"
+    },
+    {
+      "id": "loginPhoneOtpPageOtpAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SignInWithPhone/PhoneSignInOTPViewController.swift",
+      "line": 17,
+      "outlet": "otpAlertLabel",
+      "group": "loginPhoneOtpPage"
+    },
+    {
+      "id": "loginPhoneOtpPageResendButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SignInWithPhone/PhoneSignInOTPViewController.swift",
+      "line": 18,
+      "outlet": "resendButton",
+      "group": "loginPhoneOtpPage"
+    },
+    {
+      "id": "loginEmailOtpPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/EmailOTPVerify/BaseOTPVerificationViewController.swift",
+      "line": 12,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "loginEmailOtpPage"
+    },
+    {
+      "id": "loginEmailOtpPageBackButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/EmailOTPVerify/BaseOTPVerificationViewController.swift",
+      "line": 15,
+      "outlet": "backButton",
+      "group": "loginEmailOtpPage"
+    },
+    {
+      "id": "loginEmailOtpPageContactInfoLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/EmailOTPVerify/BaseOTPVerificationViewController.swift",
+      "line": 16,
+      "outlet": "contactInfoLabel",
+      "group": "loginEmailOtpPage"
+    },
+    {
+      "id": "loginEmailOtpPageOtpRefLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/EmailOTPVerify/BaseOTPVerificationViewController.swift",
+      "line": 17,
+      "outlet": "otpRefLabel",
+      "group": "loginEmailOtpPage"
+    },
+    {
+      "id": "loginEmailOtpPageOtpTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/EmailOTPVerify/BaseOTPVerificationViewController.swift",
+      "line": 18,
+      "outlet": "otpTextField",
+      "group": "loginEmailOtpPage"
+    },
+    {
+      "id": "loginEmailOtpPageOtpAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/EmailOTPVerify/BaseOTPVerificationViewController.swift",
+      "line": 19,
+      "outlet": "otpAlertLabel",
+      "group": "loginEmailOtpPage"
+    },
+    {
+      "id": "loginEmailOtpPageResendButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/EmailOTPVerify/BaseOTPVerificationViewController.swift",
+      "line": 20,
+      "outlet": "resendButton",
+      "group": "loginEmailOtpPage"
+    },
+    {
+      "id": "forgotPasswordPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ForgetPassword/ForgotPasswordViewController.swift",
+      "line": 12,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "forgotPasswordPage"
+    },
+    {
+      "id": "forgotPasswordPageEmailTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ForgetPassword/ForgotPasswordViewController.swift",
+      "line": 14,
+      "outlet": "emailTextField",
+      "group": "forgotPasswordPage"
+    },
+    {
+      "id": "forgotPasswordPageEmailAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ForgetPassword/ForgotPasswordViewController.swift",
+      "line": 16,
+      "outlet": "emailAlertLebel",
+      "group": "forgotPasswordPage"
+    },
+    {
+      "id": "forgotPasswordPageSendButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ForgetPassword/ForgotPasswordViewController.swift",
+      "line": 18,
+      "outlet": "sendButton",
+      "group": "forgotPasswordPage"
+    },
+    {
+      "id": "emailNotFoundPopupView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ForgetPassword/NotFoundEmailViewController.swift",
+      "line": 17,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "emailNotFoundPopup"
+    },
+    {
+      "id": "emailNotFoundPopupErrorMessage",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ForgetPassword/NotFoundEmailViewController.swift",
+      "line": 19,
+      "outlet": "errorMessage",
+      "group": "emailNotFoundPopup"
+    },
+    {
+      "id": "emailNotFoundPopupDismissOKButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ForgetPassword/NotFoundEmailViewController.swift",
+      "line": 21,
+      "outlet": "dismissOKButton",
+      "group": "emailNotFoundPopup"
+    },
+    {
+      "id": "registerEmailPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterEmail/RegisterEmailViewController.swift",
+      "line": 17,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "registerEmailPage"
+    },
+    {
+      "id": "registerEmailPageEmailTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterEmail/RegisterEmailViewController.swift",
+      "line": 19,
+      "outlet": "emailTextField",
+      "group": "registerEmailPage"
+    },
+    {
+      "id": "registerEmailPagePassTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterEmail/RegisterEmailViewController.swift",
+      "line": 20,
+      "outlet": "passTextField",
+      "group": "registerEmailPage"
+    },
+    {
+      "id": "registerEmailPageConfirmPassTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterEmail/RegisterEmailViewController.swift",
+      "line": 21,
+      "outlet": "confirmPassTextField",
+      "group": "registerEmailPage"
+    },
+    {
+      "id": "registerEmailPageEmailAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterEmail/RegisterEmailViewController.swift",
+      "line": 23,
+      "outlet": "emailAlertLebel",
+      "group": "registerEmailPage"
+    },
+    {
+      "id": "registerEmailPagePassAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterEmail/RegisterEmailViewController.swift",
+      "line": 25,
+      "outlet": "passAlertLebel",
+      "group": "registerEmailPage"
+    },
+    {
+      "id": "registerEmailPageConfirmPassAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterEmail/RegisterEmailViewController.swift",
+      "line": 27,
+      "outlet": "confirmPassAlertLebel",
+      "group": "registerEmailPage"
+    },
+    {
+      "id": "registerEmailPageSignupButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterEmail/RegisterEmailViewController.swift",
+      "line": 28,
+      "outlet": "signupButton",
+      "group": "registerEmailPage"
+    },
+    {
+      "id": "registerEmailPageDefaultAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterEmail/RegisterEmailViewController.swift",
+      "line": 29,
+      "outlet": "defaultAlertLebel",
+      "group": "registerEmailPage"
+    },
+    {
+      "id": "confirmEmailPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmEmail/EmailConfirmViewController.swift",
+      "line": 17,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "confirmEmailPage"
+    },
+    {
+      "id": "confirmEmailPageEmailLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmEmail/EmailConfirmViewController.swift",
+      "line": 20,
+      "outlet": "emailLabel",
+      "group": "confirmEmailPage"
+    },
+    {
+      "id": "confirmEmailPageResendButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmEmail/EmailConfirmViewController.swift",
+      "line": 21,
+      "outlet": "resendButton",
+      "group": "confirmEmailPage"
+    },
+    {
+      "id": "confirmEmailPageCancelEmailButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmEmail/EmailConfirmViewController.swift",
+      "line": 22,
+      "outlet": "cancelEmailButton",
+      "group": "confirmEmailPage"
+    },
+    {
+      "id": "verifyMemberPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/VerifyAllmemberViewController.swift",
+      "line": 12,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "verifyMemberPage"
+    },
+    {
+      "id": "verifyMemberPageThaiIdAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/VerifyAllmemberViewController.swift",
+      "line": 15,
+      "outlet": "thaiIdAlertLabel",
+      "group": "verifyMemberPage"
+    },
+    {
+      "id": "verifyMemberPageThaiIdTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/VerifyAllmemberViewController.swift",
+      "line": 16,
+      "outlet": "thaiIdTextField",
+      "group": "verifyMemberPage"
+    },
+    {
+      "id": "verifyMemberPageNextButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/VerifyAllmemberViewController.swift",
+      "line": 18,
+      "outlet": "nextButton",
+      "group": "verifyMemberPage"
+    },
+    {
+      "id": "verifyMemberPageMobileNoLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/VerifyAllmemberViewController.swift",
+      "line": 19,
+      "outlet": "mobileNoLabel",
+      "group": "verifyMemberPage"
+    },
+    {
+      "id": "verifyMemberPageBackButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/VerifyAllmemberViewController.swift",
+      "line": 20,
+      "outlet": "backButton",
+      "group": "verifyMemberPage"
+    },
+    {
+      "id": "checkMemberPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 15,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageScrollView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 17,
+      "outlet": "scrollView",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageRegisterTitle",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 19,
+      "outlet": "registerTitle",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageRegisterSubTitle",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 20,
+      "outlet": "registerSubTitle",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageMobileNoTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 24,
+      "outlet": "mobileNoTextField",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageMobileNoAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 25,
+      "outlet": "mobileNoAlertLabel",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageIdNoAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 28,
+      "outlet": "idNoAlertLabel",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageIdNoTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 29,
+      "outlet": "idNoTextField",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageThaiButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 31,
+      "outlet": "thaiButton",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageForeignerButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 32,
+      "outlet": "foreignerButton",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageNextButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 33,
+      "outlet": "nextButton",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "checkMemberPageSkipButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/AllMember/CheckAllMemberViewController.swift",
+      "line": 34,
+      "outlet": "skipButton",
+      "group": "checkMemberPage"
+    },
+    {
+      "id": "registerMemberPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 28,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageBackButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 38,
+      "outlet": "backButton",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageNameTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 41,
+      "outlet": "nameTextField",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageSurnameTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 42,
+      "outlet": "surnameTextField",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageLaserTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 43,
+      "outlet": "laserTextField",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageBranchTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 44,
+      "outlet": "branchTextField",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageDateTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 45,
+      "outlet": "dateTextField",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageMaleButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 46,
+      "outlet": "maleBtn",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageFemaleButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 47,
+      "outlet": "femaleBtn",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageUnsignButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 48,
+      "outlet": "unsignBtn",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageTermConButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 49,
+      "outlet": "termConBtn",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageIdentInfoButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 52,
+      "outlet": "identInfoBtn",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageRegisterButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 57,
+      "outlet": "registerBtn",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageWarningBranchLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 59,
+      "outlet": "warningBranchLabel",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageScrollView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 60,
+      "outlet": "scrollView",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageNameAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 66,
+      "outlet": "nameAlertLabel",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageSurnameAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 67,
+      "outlet": "surnameAlertLabel",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageBackCardAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 68,
+      "outlet": "backCardAlertLabel",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageDateAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 69,
+      "outlet": "dateAlertLabel",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageGenderAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 70,
+      "outlet": "genderAlertLabel",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageStaffNumberTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 82,
+      "outlet": "staffNumberTextField",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageStaffAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 83,
+      "outlet": "staffAlertLabel",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberPageSkipButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/PreRegisterAllMember/PreRegisterViewController.swift",
+      "line": 87,
+      "outlet": "skipButton",
+      "group": "registerMemberPage"
+    },
+    {
+      "id": "registerMemberOtpPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 13,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPageBackButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 24,
+      "outlet": "backButton",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPagePhoneLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 25,
+      "outlet": "phoneLabel",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPageFirstDigitTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 26,
+      "outlet": "firstDigitTextfield",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPageSecondDigitTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 27,
+      "outlet": "secondDigitTextfield",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPageThirdDigitTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 28,
+      "outlet": "thirdDigitTextfield",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPageFourthDigitTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 29,
+      "outlet": "fourthDigitTextfield",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPageFifthDigitTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 30,
+      "outlet": "fifthDigitTextfield",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPageSixthDigitTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 31,
+      "outlet": "sixthDigitTextfield",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPageOTPAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 32,
+      "outlet": "OTPAlertLabel",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPageRefNumLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 33,
+      "outlet": "refNumLbl",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "registerMemberOtpPageHeaderLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ConfirmOTP/ConfirmOTPViewController.swift",
+      "line": 35,
+      "outlet": "headerLabel",
+      "group": "registerMemberOtpPage"
+    },
+    {
+      "id": "resetLoginPopupView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ResetPopup/ResetLoginPopupViewController.swift",
+      "line": 14,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "resetLoginPopup"
+    },
+    {
+      "id": "resetLoginPopupConfirmButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ResetPopup/ResetLoginPopupViewController.swift",
+      "line": 16,
+      "outlet": "confirmButton",
+      "group": "resetLoginPopup"
+    },
+    {
+      "id": "resetLoginPopupSubtitleLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ResetPopup/ResetLoginPopupViewController.swift",
+      "line": 17,
+      "outlet": "subtitleLabel",
+      "group": "resetLoginPopup"
+    },
+    {
+      "id": "resetLoginPopupTitleLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ResetPopup/ResetLoginPopupViewController.swift",
+      "line": 18,
+      "outlet": "titleLabel",
+      "group": "resetLoginPopup"
+    },
+    {
+      "id": "resetLoginPopupSkipButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/ResetPopup/ResetLoginPopupViewController.swift",
+      "line": 19,
+      "outlet": "skipButton",
+      "group": "resetLoginPopup"
+    },
+    {
+      "id": "setPasswordPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 15,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "setPasswordPagePasswordTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 16,
+      "outlet": "passwordTextField",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "setPasswordPageConfirmButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 17,
+      "outlet": "confirmButton",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "setPasswordPageConfirmPasswordTextField",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 18,
+      "outlet": "confirmPasswordTextField",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "setPasswordPagePasswordAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 28,
+      "outlet": "passwordAlertLabel",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "setPasswordPageConfirmAlertLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 29,
+      "outlet": "confirmAlertLabel",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "setPasswordPageTitleLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 31,
+      "outlet": "titleLabel",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "setPasswordPageSubTitleLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 32,
+      "outlet": "subTitleLabel",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "setPasswordPageYourEmailLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 33,
+      "outlet": "yourEmailLabel",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "setPasswordPageEmailLabel",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 34,
+      "outlet": "emailLabel",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "setPasswordPageCloseButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SetPassword/SetPasswordViewController.swift",
+      "line": 35,
+      "outlet": "closeButton",
+      "group": "setPasswordPage"
+    },
+    {
+      "id": "skipLoginPopupView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SkipPopup/PopupSkipAuthenViewController.swift",
+      "line": 25,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "skipLoginPopup"
+    },
+    {
+      "id": "skipLoginPopupRegisterButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SkipPopup/PopupSkipAuthenViewController.swift",
+      "line": 33,
+      "outlet": "registerButton",
+      "group": "skipLoginPopup"
+    },
+    {
+      "id": "skipLoginPopupSevenPopupView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SkipPopup/PopupSkipAuthenViewController.swift",
+      "line": 34,
+      "outlet": "sevenPopupView",
+      "group": "skipLoginPopup"
+    },
+    {
+      "id": "skipLoginPopupMemberPopupView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/SkipPopup/PopupSkipAuthenViewController.swift",
+      "line": 35,
+      "outlet": "memberPopupView",
+      "group": "skipLoginPopup"
+    },
+    {
+      "id": "register7AppSuccessPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Register7AppSuccess/Register7AppSuccessViewController.swift",
+      "line": 14,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "register7AppSuccessPage"
+    },
+    {
+      "id": "register7AppSuccessPageRegisterButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Register7AppSuccess/Register7AppSuccessViewController.swift",
+      "line": 16,
+      "outlet": "registerButton",
+      "group": "register7AppSuccessPage"
+    },
+    {
+      "id": "register7AppSuccessPageForeignerRegisterButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Register7AppSuccess/Register7AppSuccessViewController.swift",
+      "line": 17,
+      "outlet": "foreignerRegisterBtn",
+      "group": "register7AppSuccessPage"
+    },
+    {
+      "id": "register7AppSuccessPageSkipButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Register7AppSuccess/Register7AppSuccessViewController.swift",
+      "line": 18,
+      "outlet": "skipButton",
+      "group": "register7AppSuccessPage"
+    },
+    {
+      "id": "register7AppSuccessPageScrollView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/Register7AppSuccess/Register7AppSuccessViewController.swift",
+      "line": 19,
+      "outlet": "scrollView",
+      "group": "register7AppSuccessPage"
+    },
+    {
+      "id": "registerMemberSuccessPageView",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterAllMemberSuccess/RegisterMemberSuccessViewController.swift",
+      "line": 11,
+      "outlet": "view (page marker; verify accessibility hierarchy)",
+      "group": "registerMemberSuccessPage"
+    },
+    {
+      "id": "registerMemberSuccessPageRegisterWalletButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterAllMemberSuccess/RegisterMemberSuccessViewController.swift",
+      "line": 13,
+      "outlet": "registerWalletButton",
+      "group": "registerMemberSuccessPage"
+    },
+    {
+      "id": "registerMemberSuccessPageSkipRegisterTMWButton",
+      "file": "/Users/chanoncha/7-eleven-ios/Modules/Authentication/Authentication/Classes/Scenes/RegisterAllMemberSuccess/RegisterMemberSuccessViewController.swift",
+      "line": 14,
+      "outlet": "skipRegisterTMWButton",
+      "group": "registerMemberSuccessPage"
+    }
+  ]
+}

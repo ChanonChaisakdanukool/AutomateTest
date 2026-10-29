@@ -1,3 +1,7 @@
-// Register only implemented cases verified against QA TestCase Documents.
-// No sample case is executable yet.
-export const caseRegistry = new Map();
+import { loginOpenProfile } from '../Scripts/Login/open-profile.mjs';
+import { loginOpenProfileCancel } from '../Scripts/Login/open-profile-cancel.mjs';
+
+export const caseRegistry = new Map([
+  ['LOGIN_OPEN_PROFILE', loginOpenProfile],
+  ['LOGIN_OPEN_PROFILE_CANCEL', loginOpenProfileCancel],
+]);

@@ -1,0 +1,17 @@
+{
+  "platform": "iOS",
+  "runName": "FirstSmoke",
+  "shouldContinueNextCaseWhenFail": false,
+  "testCases": [
+    {
+      "file": "../TestCases/LOGIN_OPEN_PROFILE.json"
+    },
+    {
+      "file": "../TestCases/LOGIN_OPEN_PROFILE_CANCEL.json"
+    }
+  ],
+  "shouldLogin": true,
+  "loginMethod": "phone",
+  "phoneNumber": "REPLACE_WITH_TEST_PHONE_NUMBER",
+  "email": "REPLACE_WITH_TEST_EMAIL"
+}
