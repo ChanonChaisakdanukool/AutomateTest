@@ -20,7 +20,41 @@ fi
 "$node_bin" -e 'const [major,minor]=process.versions.node.split(".").map(Number);process.exit(major>22 || (major===22 && minor>=12) ? 0 : 1)' || fail 'Node.js 22.12+ is required.'
 [ -f node_modules/appium/build/lib/main.js ] || fail 'Appium is missing. Run npm install in this project first.'
 
-# Listen locally, matching Main Manager. Appium reports port conflicts itself.
+# Restart only an Appium listener owned by this user. Active sessions will end.
+listener_pids=$(/usr/sbin/lsof -nP -t -iTCP:4723 -sTCP:LISTEN 2>/dev/null | /usr/bin/sort -u)
+for server_pid in $listener_pids; do
+  server_command=$(/bin/ps -p "$server_pid" -o command=)
+  server_owner=$(/bin/ps -p "$server_pid" -o uid= | /usr/bin/tr -d ' ')
+  [ "$server_owner" = "$(id -u)" ] || fail "Port 4723 belongs to another user; not stopping PID $server_pid."
+  if ! printf '%s\n' "$server_command" | /usr/bin/grep -Eq '(^|[ /])appium([ /]|$)'; then
+    fail "Port 4723 is used by a non-Appium process (PID $server_pid)."
+  fi
+
+  echo "Stopping previous Appium server (PID $server_pid). Existing sessions will end."
+  kill -TERM "$server_pid" 2>/dev/null || true
+  for ((attempt = 0; attempt < 50; attempt++)); do
+    kill -0 "$server_pid" 2>/dev/null || break
+    sleep 0.2
+  done
+  if kill -0 "$server_pid" 2>/dev/null; then
+    # Recheck identity before forcing shutdown in case the PID was reused.
+    current_command=$(/bin/ps -p "$server_pid" -o command=)
+    [ "$current_command" = "$server_command" ] || fail 'Process identity changed; restart cancelled.'
+    echo "Appium did not stop in 10 seconds; forcing shutdown (PID $server_pid)."
+    kill -KILL "$server_pid" 2>/dev/null || true
+  fi
+done
+
+# Verify the old listener released its port before starting the new server.
+for ((attempt = 0; attempt < 20; attempt++)); do
+  /usr/sbin/lsof -nP -t -iTCP:4723 -sTCP:LISTEN >/dev/null 2>&1 || break
+  sleep 0.1
+done
+if /usr/sbin/lsof -nP -t -iTCP:4723 -sTCP:LISTEN >/dev/null 2>&1; then
+  fail 'Port 4723 is still occupied. Appium was not started.'
+fi
+
+# Listen locally, matching Main Manager.
 echo 'Starting Appium at http://127.0.0.1:4723/'
 echo 'Keep this window open while running tests. Press Control+C to stop.'
 "$node_bin" node_modules/appium/build/lib/main.js --address 127.0.0.1 --port 4723

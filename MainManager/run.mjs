@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'node:url';
-import { runAutomation } from './runner.mjs';
+import { runWithResults } from './results.mjs';
 
 const defaultRunPath = fileURLToPath(new URL('../Config/Local/RunConfig.json', import.meta.url));
 
@@ -25,8 +25,10 @@ function parseArguments(args) {
 }
 
 try {
-  const summary = await runAutomation(parseArguments(process.argv.slice(2)));
+  const summary = await runWithResults(() => parseArguments(process.argv.slice(2)));
   console.log(JSON.stringify(summary, null, 2));
+  if (summary.resultLocation) console.log(`Results: ${summary.resultLocation}`);
+  if (summary.resultSaveFailed) console.error('บันทึกผลไม่สำเร็จ: ดูผลใน Terminal ด้านบน');
   process.exitCode = summary.status === 'PASS' ? 0 : summary.status === 'FAIL' ? 1 : 2;
 } catch (error) {
   console.error(JSON.stringify({ status: 'ERROR', phase: 'preflight', message: error.message }, null, 2));

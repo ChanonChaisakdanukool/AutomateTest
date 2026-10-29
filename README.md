@@ -32,13 +32,13 @@ RunConfig เก็บ runName, shouldContinueNextCaseWhenFail, platform, ค่
 - Pages: Action ของหน้า ใช้ IDFile constants
 - Scripts: ขั้นตอนและ expected behavior ของแต่ละเคส
 - Reuses: พื้นที่สำหรับ flow ร่วมในอนาคต
-- Results: ยังไม่มี writer ผลแสดง JSON ใน Terminal เท่านั้น
+- Results: บันทึก result.json, report.html และ journal.jsonl แยกต่อรอบ พร้อมผลใน Terminal และไฟล์สำรองเมื่อเขียนผลหลักไม่ได้
 
 ## ผลการรัน
 
 ASSERTION_MISMATCH จาก Core เป็น FAIL; error อื่นเป็น ERROR ใน runner ขั้นพื้นฐาน ERROR หยุดชุดทดสอบ FAIL ไปต่อเฉพาะ flag อนุญาต หลัง PASS/FAIL ปิด–เปิดแอปโดยไม่ล้างข้อมูล ไม่มี reset ระหว่าง subcase และไม่ retry ธุรกรรม
 
-exit code: 0 PASS, 1 FAIL, 2 ERROR เก็บ case error แยกจาก reset/session cleanup errors ยังไม่มี screenshot/video, result writer/journal/fallback, system permission handler, timeout ทั้ง testcase หรือ session recovery
+exit code: 0 PASS, 1 FAIL, 2 ERROR เก็บ case error แยกจาก reset/session cleanup errors ยังไม่มี screenshot/video, step history, system permission handler, timeout ทั้ง testcase หรือ session recovery
 
 ## คำสั่ง
 
@@ -58,3 +58,5 @@ Appium ต้องเปิดอยู่ที่ http://127.0.0.1:4723/ ก�
 เคยเปิด iOS Simulator session และทดสอบ Confirm Popup หายได้ ปัจจุบัน Cancel flow และการรันสองเคสต่อกันยังต้องตรวจด้วย build ล่าสุด Android/Web ยังไม่มีผลทดสอบแอปจริง Unit tests ใช้ driver จำลอง ไม่แทนการตรวจอุปกรณ์จริง
 
 Android environment โหลดผ่าน tools/android-env.sh; ใช้ Appium driver doctor xcuitest/uiautomator2 ตรวจเครื่องเป้าหมาย ข้อมูลติดตั้งบนเครื่องและเวอร์ชันอาจต่างกัน ต้องตรวจจริงก่อนใช้งาน
+
+StartAppium.command จะหยุด Appium ของผู้ใช้ปัจจุบันที่ฟังพอร์ต 4723 ก่อนเปิดใหม่เสมอ ส่ง TERM รอสูงสุด 10 วินาทีแล้วใช้ KILL หากจำเป็น session ที่กำลังรันจะสิ้นสุด หากพอร์ตเป็นโปรแกรมอื่นจะหยุด launcher พร้อมข้อความแทนการ kill โปรแกรมนั้น

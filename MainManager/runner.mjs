@@ -44,7 +44,7 @@ async function withTimeout(operation, timeout, phase) {
 /**
  * รันหนึ่งอุปกรณ์ตามลำดับ ใช้ Appium server ที่เปิดไว้แล้ว
  * เคสรับ { core, loginConfig, additionalData, executionIndex } และ throw เมื่อไม่ผ่าน
- * คืนสรุปในหน่วยความจำ; ยังไม่ใช่ Result Document/Evidence pipeline
+ * คืนสรุปพร้อมเวลา และส่ง event ให้ Result Writer ผ่าน onEvent
  */
 export async function runAutomation({
   devicePath,
@@ -52,6 +52,7 @@ export async function runAutomation({
   registry = caseRegistry,
   createSession = remote,
   coreFactory = createCore,
+  onEvent = async () => {},
 }) {
   const testConfig = await loadTestCaseConfig(testCasePath, registry);
   const selectedDevicePath = devicePath ?? selectDeviceConfig(testConfig.platform);
@@ -71,6 +72,7 @@ export async function runAutomation({
 
   const summary = {
     runName: testConfig.runName ?? null,
+    platform: deviceConfig.platform,
     status: 'PASS',
     cases: [],
     errors: [],
@@ -100,6 +102,9 @@ export async function runAutomation({
       const definition = entry.case;
       const result = { executionIndex: index + 1, caseId: definition.id, status: 'PASS' };
       phase = 'caseExecution';
+      const caseStart = performance.now();
+      result.startedAt = new Date().toISOString();
+      await onEvent({ event: 'caseStarted', executionIndex: result.executionIndex, caseId: result.caseId });
 
       try {
         // Clone ต่อ execution ป้องกันเคสแก้ข้อมูลแล้วส่งผลต่อ duplicate case ถัดไป
@@ -115,7 +120,10 @@ export async function runAutomation({
         result.status = error instanceof CoreError && error.code === 'ASSERTION_MISMATCH' ? 'FAIL' : 'ERROR';
         result.error = describeError(error);
       }
+      result.finishedAt = new Date().toISOString();
+      result.durationMs = Math.round(performance.now() - caseStart);
       summary.cases.push(result);
+      await onEvent({ event: 'caseFinished', result });
 
       if (result.status === 'ERROR') {
         summary.status = 'ERROR';

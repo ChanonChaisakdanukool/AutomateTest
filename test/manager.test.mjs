@@ -136,3 +136,18 @@ test('platform mismatch rejected before opening session', async t => {
   await assert.rejects(runAutomation(f.options), /must match/);
   assert.deepEqual(f.calls, []);
 });
+
+
+test('journal failure stops next case and still closes session', async t => {
+  const f = await fixture(t);
+  f.options.onEvent = async event => {
+    if (event.event === 'caseFinished') throw new Error('journal write failed');
+  };
+  const result = await runAutomation(f.options);
+  assert.equal(result.status, 'ERROR');
+  assert.equal(result.cases[0].status, 'PASS');
+  assert.equal(result.cases.length, 1);
+  assert.equal(result.skippedCases.length, 1);
+  assert.equal(f.calls.at(-1), 'delete');
+  assert.ok(!f.calls.includes('case2'));
+});
