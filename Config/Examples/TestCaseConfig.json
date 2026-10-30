@@ -1,0 +1,18 @@
+{
+  "runName": "FirstSmoke",
+  "shouldContinueNextCaseWhenFail": false,
+  "loginMethod": "phone",
+  "phoneNumber": "0805524025",
+  "email": "chanoncha@gosoft.co.th",
+  "shouldLogin": true,
+   "testCases": [
+    {
+      "case": {
+        "id": "LOGIN_OPEN_PROFILE",
+        "additionalData": {
+    
+        }
+      }
+    }
+  ]
+}

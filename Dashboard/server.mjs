@@ -1,9 +1,9 @@
 import http from 'node:http';
-import { stripVTControlCharacters } from 'node:util';
-import { readFile, readdir, writeFile, rename, rm, mkdir } from 'node:fs/promises';
+import { promisify, stripVTControlCharacters } from 'node:util';
+import { readFile, readdir, realpath, writeFile, rename, rm, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
-import { spawn } from 'node:child_process';
+import { spawn, execFile } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { caseRegistry } from '../MainManager/case-registry.mjs';
 import { loadTestCaseConfig } from '../MainManager/testcase-config.mjs';
@@ -18,11 +18,14 @@ const token = randomBytes(32).toString('hex');
 let appium;
 let run;
 let busy = false;
+let stopping = false;
+const exec = promisify(execFile);
 let runState = { status: 'idle', exitCode: null };
 const logs = { appium: '', run: '' };
 const log = (kind, text) => { logs[kind] = (logs[kind] + stripVTControlCharacters(text)).slice(-200000); };
 
 async function appiumStatus() {
+  if (stopping) return 'stopping';
   try {
     const response = await fetch('http://127.0.0.1:4723/status', { signal: AbortSignal.timeout(1200) });
     const data = await response.json();
@@ -32,7 +35,7 @@ async function appiumStatus() {
 }
 
 function launch(kind, args) {
-  const child = spawn(process.execPath, args, { cwd: root, env: { ...process.env, AUTOMATION_PROGRESS: kind === 'run' ? '1' : '0' }, stdio: ['ignore', 'pipe', 'pipe'] });
+  const child = spawn(process.execPath, args, { detached: process.platform !== 'win32', cwd: root, env: { ...process.env, AUTOMATION_PROGRESS: kind === 'run' ? '1' : '0' }, stdio: ['ignore', 'pipe', 'pipe'] });
   logs[kind] = '';
   log(kind, `เริ่ม ${kind} เวลา ${new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}\n`);
   for (const stream of [child.stdout, child.stderr]) {
@@ -43,9 +46,54 @@ function launch(kind, args) {
   child.on('close', (code, signal) => {
     log(kind, `\nจบ ${kind}: exit=${code}, signal=${signal ?? '-'}\n`);
     if (kind === 'appium') appium = null;
-    else { run = null; runState = { status: code === 0 ? 'PASS' : code === 1 ? 'FAIL' : 'ERROR', exitCode: code }; }
+    else { run = null; runState = { status: child.userStopped ? 'STOPPED' : code === 0 ? 'PASS' : code === 1 ? 'FAIL' : 'ERROR', exitCode: code }; }
   });
   return child;
+}
+
+/** หยุด process group ของ Dashboard เพื่อรวม process ลูก ไม่แตะโปรแกรมอื่น */
+async function stopOwned(child) {
+  if (!child?.pid) return;
+  const pid = process.platform === 'win32' ? child.pid : -child.pid;
+  const exists = () => { try { process.kill(pid, 0); return true; } catch (error) { if (error.code === 'ESRCH') return false; throw error; } };
+  if (!exists()) return;
+  process.kill(pid, 'SIGTERM');
+  for (let i = 0; i < 50 && exists(); i++) await new Promise(resolve => setTimeout(resolve, 100));
+  if (exists()) process.kill(pid, 'SIGKILL');
+}
+
+/** Appium ที่เปิดจาก Terminal ใช้ได้เช่นกัน แต่ต้องเป็น Appium ของ user ปัจจุบัน */
+async function stopExternalAppium() {
+  let output;
+  try { output = (await exec('/usr/sbin/lsof', ['-nP', '-t', '-iTCP:4723', '-sTCP:LISTEN'])).stdout; }
+  catch (error) { if (error.code === 1 && !error.stdout) return; throw error; }
+  for (const pid of [...new Set(output.trim().split(/\s+/).filter(Boolean))]) {
+    const inspect = async () => (await exec('/bin/ps', ['-p', pid, '-o', 'uid=', '-o', 'command='])).stdout.trim();
+    const identity = await inspect();
+    const match = identity.match(/^(\d+)\s+(.+)$/);
+    if (!match || Number(match[1]) !== process.getuid() || !/(^|[ /])appium([ /]|$)/.test(match[2])) throw new Error('พอร์ต 4723 ไม่ใช่ Appium ของผู้ใช้ปัจจุบัน จึงไม่ปิด process นี้');
+    process.kill(Number(pid), 'SIGTERM');
+    for (let i = 0; i < 50; i++) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      try { if (await inspect() !== identity) break; }
+      catch (error) { if (error.code === 1) break; throw error; }
+      if (i === 49) process.kill(Number(pid), 'SIGKILL');
+    }
+  }
+}
+
+async function stopAll() {
+  stopping = true;
+  const hadRun = !!run;
+  try {
+    log('run', 'ผู้ใช้สั่งปิด Appium และหยุดการทำงาน\n');
+    if (run) run.userStopped = true;
+    await stopOwned(run);
+    await stopOwned(appium);
+    await stopExternalAppium();
+    if (hadRun) runState = { status: 'STOPPED', exitCode: null };
+    log('appium', 'ปิด Appium แล้ว\n');
+  } finally { stopping = false; }
 }
 
 async function body(req) {
@@ -67,6 +115,14 @@ async function saveConfig(config) {
     selectDeviceConfig(config.platform);
     await rename(temporary, configPath);
   } finally { await rm(temporary, { force: true }); }
+}
+
+async function resultFile(runName, file) {
+  if (!runName || runName.includes('/') || runName.includes('\\') || !['report.html', 'report.xlsx', 'result.json', 'journal.jsonl'].includes(file)) throw new Error('Invalid result path');
+  const resultsRoot = await realpath(join(root, 'Results'));
+  const target = await realpath(join(resultsRoot, runName, file));
+  if (!target.startsWith(resultsRoot + '/')) throw new Error('Invalid result path');
+  return target;
 }
 
 const server = http.createServer(async (req, res) => {
@@ -103,11 +159,60 @@ const server = http.createServer(async (req, res) => {
       config = await loadTestCaseConfig(sourcePath, caseRegistry);
       return json(200, { config, cases });
     }
+    const url = new URL(req.url, origin);
+    if (req.method === 'GET' && url.pathname === '/api/device') {
+      const platform = url.searchParams.get('platform');
+      const path = selectDeviceConfig(platform);
+      let config;
+      try { config = JSON.parse(await readFile(path, 'utf8')); }
+      catch (error) {
+        if (error.code !== 'ENOENT') throw error;
+        config = JSON.parse(await readFile(join(root, 'Config/Examples', platform === 'iOS' ? 'DeviceConfig.ios.json' : 'DeviceConfig.android.json'), 'utf8'));
+      }
+      return json(200, { config });
+    }
+    if (req.method === 'GET' && url.pathname === '/api/results') {
+      const results = [];
+      for (const entry of await readdir(join(root, 'Results'), { withFileTypes: true })) {
+        if (!entry.isDirectory()) continue;
+        try {
+          const value = JSON.parse(await readFile(await resultFile(entry.name, 'result.json'), 'utf8'));
+          results.push({ folder: entry.name, runName: value.runName, status: value.status, startedAt: value.startedAt });
+        } catch { /* incomplete runs do not have a final report yet */ }
+      }
+      results.sort((a,b) => (b.startedAt ?? '').localeCompare(a.startedAt ?? ''));
+      return json(200, { results });
+    }
+    if (req.method === 'GET' && url.pathname === '/api/results/file') {
+      const file = url.searchParams.get('file');
+      const content = await readFile(await resultFile(url.searchParams.get('run'), file));
+      res.writeHead(200, { 'Content-Type': file === 'report.html' ? 'text/html; charset=utf-8' : 'application/octet-stream' });
+      return res.end(content);
+    }
     if (req.method === 'GET' && req.url === '/api/status') return json(200, { appium: await appiumStatus(), run: runState, logs });
-    if (req.method !== 'POST' || !['/api/config', '/api/appium/start', '/api/run/start'].includes(req.url)) return json(404, { error: 'Not found' });
-    if (busy || run) return json(409, { error: 'กำลังทำงาน กรุณารอให้จบก่อน' });
+    if (req.method === 'POST' && req.url === '/api/appium/stop') {
+      if (stopping || busy) return json(409, { error: 'กำลังดำเนินการ กรุณารอสักครู่' });
+      await stopAll();
+      return json(200, { message: 'หยุดการทดสอบและปิด Appium แล้ว' });
+    }
+    if (req.method !== 'POST' || !['/api/config', '/api/device', '/api/appium/start', '/api/run/start'].includes(req.url)) return json(404, { error: 'Not found' });
+    if (busy || run || stopping) return json(409, { error: 'กำลังทำงาน กรุณารอให้จบก่อน' });
     busy = true;
     try {
+      if (req.url === '/api/device') {
+        const config = await body(req);
+        const path = selectDeviceConfig(config.platform);
+        const temp = `${path}.${randomBytes(6).toString('hex')}.tmp`;
+        await mkdir(join(root, 'Config/Local'), { recursive: true });
+        try {
+          await writeFile(temp, JSON.stringify(config, null, 2) + '\n', { mode: 0o600, flag: 'wx' });
+          await loadDeviceConfig(temp);
+          const identity = config.platform === 'iOS' ? config.app.bundleId : config.app.appPackage;
+          if (typeof identity !== 'string' || !identity.trim() || identity.includes('REPLACE_WITH_')) throw new Error('กรุณาระบุ Bundle ID / App Package สำหรับเปิดแอปหลังจบเคส');
+          await rename(temp, path);
+        } finally { await rm(temp, { force: true }); }
+        return json(200, { message: 'บันทึก Device Config แล้ว' });
+      }
       if (req.url === '/api/config') { await saveConfig(await body(req)); return json(200, { message: 'บันทึก RunConfig แล้ว' }); }
       if (req.url === '/api/appium/start') {
         if (await appiumStatus() === 'ready') return json(200, { message: 'Appium พร้อมใช้งานอยู่แล้ว' });
