@@ -60,3 +60,17 @@ Appium ต้องเปิดอยู่ที่ http://127.0.0.1:4723/ ก�
 Android environment โหลดผ่าน tools/android-env.sh; ใช้ Appium driver doctor xcuitest/uiautomator2 ตรวจเครื่องเป้าหมาย ข้อมูลติดตั้งบนเครื่องและเวอร์ชันอาจต่างกัน ต้องตรวจจริงก่อนใช้งาน
 
 StartAppium.command จะหยุด Appium ของผู้ใช้ปัจจุบันที่ฟังพอร์ต 4723 ก่อนเปิดใหม่เสมอ ส่ง TERM รอสูงสุด 10 วินาทีแล้วใช้ KILL หากจำเป็น session ที่กำลังรันจะสิ้นสุด หากพอร์ตเป็นโปรแกรมอื่นจะหยุด launcher พร้อมข้อความแทนการ kill โปรแกรมนั้น
+
+
+## Dashboard สำหรับ QA
+
+ดับเบิลคลิก `StartDashboard.command` เปิด http://127.0.0.1:4730 และคงหน้าต่าง Terminal ไว้
+แก้ Run Name / Platform / ข้อมูล Login / ลำดับเคส จากนั้นกดเปิด Appium รอพร้อม และกดบันทึกและ Start
+Config บันทึกลง `Config/Local/RunConfig.json` ส่วน Device Config ยังแยกเหมือนเดิม
+หน้าเว็บอ่านไฟล์จาก Config/TestCases มาเพิ่มเป็นสำเนาใน RunConfig และ resolve file references เดิมเมื่อโหลด แสดงเฉพาะชื่อ เคสซ้ำมี additionalData อิสระ; string/number เป็นช่องกรอก boolean เป็นตัวเลือก true/false และ object/array แสดงช่องตามโครงสร้าง null แสดงอ่านอย่างเดียวเพราะยังไม่มีชนิดข้อมูล
+ลากที่ handle เพื่อจัดลำดับ หรือใช้ปุ่มขึ้นลงได้ หน้าเว็บไม่มี JSON editor หากต้องการกำหนดฟิลด์ใหม่ให้แก้ไฟล์เคสในโปรเจกต์แล้วโหลดหน้าใหม่ การบันทึกหน้าเว็บเก็บเคสแบบ inline ไม่แก้ไฟล์ต้นฉบับ
+แสดง Test Log และ Appium Log (เฉพาะ Appium ที่เปิดจาก Dashboard) อัปเดตทุก 2 วินาที เก็บข้อความล่าสุดไม่เกิน 200,000 ตัวอักษรต่อช่อง
+ระหว่างรันล็อก Config และปุ่ม Start; เมื่อ Appium เปิดอยู่แล้วใช้ตัวเดิม ไม่ restart
+สถานะอิง /status จริง ไม่ถือว่ากดเปิดแล้วพร้อมทันที
+ผลยังอยู่ใน Results ตามเดิม; รายละเอียดการกดแต่ละปุ่มต้องเพิ่ม Step ภายหลัง
+Control+C ปิด Dashboard และส่ง SIGTERM ให้ process ที่ Dashboard เปิดไว้ จึงควรรอเคสจบก่อนปิด

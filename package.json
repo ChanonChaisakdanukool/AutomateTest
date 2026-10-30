@@ -16,7 +16,13 @@
     "appium": "^3.0.0",
     "appium-uiautomator2-driver": "^8.7.3",
     "appium-xcuitest-driver": "^12.22.1",
+    "exceljs": "^4.4.0",
     "shared-element-ids": "github:ChanonChaisakdanukool/IDFile#8e8166e2099047c2741a7a0d972c47689f8ae269",
     "webdriverio": "^10.1.0"
+  },
+  "overrides": {
+    "exceljs": {
+      "uuid": "^11.1.1"
+    }
   }
 }

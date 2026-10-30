@@ -1,0 +1,60 @@
+<!doctype html><html lang="th"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Automation Dashboard</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f5f8;color:#243746;font:15px system-ui,sans-serif}main{max-width:1200px;margin:32px auto;padding:0 24px}h1{margin:0}h2{font-size:19px;margin-top:0}.subtitle{color:#677586}section{background:white;border:1px solid #dae1e8;border-radius:12px;padding:24px;margin:20px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}label{display:block;font-weight:600}input,select,textarea{width:100%;font:inherit;padding:10px;border:1px solid #bcc9d5;border-radius:6px;margin-top:6px}input[type=checkbox]{width:auto}button{font:inherit;padding:10px 18px;border:0;border-radius:6px;background:#215b82;color:white;cursor:pointer}button:disabled{opacity:.45;cursor:default}.secondary{background:#e8eef4;color:#243746}.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.badge{padding:7px 12px;border-radius:20px;background:#e8eef4}.ready,.PASS{background:#dcf3e7;color:#186b40}.ERROR,.offline{background:#fde8e8;color:#a12e2e}.case{display:flex;gap:8px;align-items:center;margin:10px 0}.case span{flex:1;overflow-wrap:anywhere}textarea{font-family:monospace}pre{background:#17232e;color:#dce8f4;padding:16px;white-space:pre-wrap;overflow:auto;height:340px;font:12px/1.6 monospace;border-radius:8px}#notice{min-height:24px;color:#215b82;white-space:pre-wrap}small{color:#677586}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+select{appearance:none;padding-right:44px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%2346596b' stroke-width='1.7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}summary{padding:8px 16px 8px 0;cursor:pointer}.case-card{border:1px solid #dbe3ea;border-radius:10px;padding:12px 16px;margin:12px 0}.case{margin:0;flex-wrap:wrap}.case span{min-width:180px}.drag-handle{cursor:grab;font-size:22px;padding:6px 12px}.drop-target{outline:2px solid #215b82;background:#edf5fb}.dragging{opacity:.5}.additional{border-top:1px solid #e3e9ef;margin-top:12px;padding-top:8px}.additional>div{margin:10px 0}.additional input,.additional select{max-width:480px}h4{margin:6px 0}
+</style><main><h1>Automation Dashboard</h1><p class="subtitle">ตั้งค่าชุดทดสอบ เปิด Appium และติดตามการรัน</p>
+<section><div class="grid"><div><h2>Appium Server</h2><div class="toolbar"><span id="appiumStatus" class="badge">กำลังตรวจสอบ</span><button id="appiumStart">เปิด Appium</button></div><p><small>127.0.0.1:4723 · ถ้าเปิดอยู่แล้วจะใช้ Server เดิม</small></p></div><div><h2>การทดสอบ</h2><div class="toolbar"><span id="runStatus" class="badge">ยังไม่เริ่ม</span><button id="start" disabled>บันทึกและ Start</button></div><p><small>ใช้ Device Config ตาม Platform ที่เลือก</small></p></div></div></section>
+<section><h2>Run Config</h2><fieldset id="fields" style="border:0;padding:0;margin:0"><div class="grid"><label>Run Name<input id="runName" placeholder="LoginOpenProfile"></label><label>Platform<select id="platform"><option>iOS</option><option>Android</option></select></label></div><p><label><input type="checkbox" id="continueOnFail"> รันเคสถัดไปเมื่อ FAIL</label></p>
+<details><summary>ข้อมูล Login กลาง</summary><p><label><input id="shouldLogin" type="checkbox"> shouldLogin</label></p><div class="grid"><label>วิธี Login<select id="loginMethod"><option value="">ไม่ระบุ</option><option value="phone">เบอร์โทร</option><option value="email">อีเมล</option></select></label><label>เบอร์โทร<input id="phoneNumber" type="text"></label><label>อีเมล<input id="email" type="text"></label></div></details>
+<h3>ลำดับ Test Case</h3><div class="toolbar"><select id="casePicker" style="width:auto;max-width:100%"></select><button id="add" class="secondary">เพิ่มเคส</button></div><div id="cases"></div>
+<p><button id="save">ตรวจและบันทึก Config</button></p></fieldset><div id="notice" role="status" aria-live="polite"></div></section>
+<div class="grid"><section><h2>Test Log</h2><pre id="runLog">ยังไม่มี log</pre></section><section><h2>Appium Log</h2><pre id="appiumLog">แสดง log ของ Server ที่เปิดจาก Dashboard นี้</pre></section></div></main>
+<script>
+const token='__TOKEN__';const $=id=>document.getElementById(id);let config={},catalog=[],loaded=false,pending=false,ready=false,running=false,dragIndex=null;
+async function api(path,method='GET',data){const response=await fetch('/api/'+path,{method,headers:{'X-Dashboard-Token':token,'Content-Type':'application/json'},body:data===undefined?undefined:JSON.stringify(data)});const result=await response.json();if(!response.ok)throw Error(result.error);return result;}
+function notice(text){$('notice').textContent=text;}
+function controls(){ $('start').disabled=!loaded||pending||running||!ready;$('fields').disabled=!loaded||pending||running;$('appiumStart').disabled=pending||running||ready; }
+function collect(){const next={...config,platform:$('platform').value,shouldContinueNextCaseWhenFail:$('continueOnFail').checked,shouldLogin:$('shouldLogin').checked};for(const key of ['runName','loginMethod','phoneNumber','email']){const value=$(key).value.trim();if(value)next[key]=value;else delete next[key];}return next;}
+function move(from,to){if(running||pending||from===to)return;config=collect();const [entry]=config.testCases.splice(from,1);config.testCases.splice(to,0,entry);draw();}
+function additionalFields(value,parent,key,labelText){
+ const wrap=document.createElement('div');
+ if(value!==null&&typeof value==='object'){
+  const title=document.createElement('h4');title.textContent=labelText;wrap.append(title);
+  for(const child of Object.keys(value))wrap.append(additionalFields(value[child],value,child,child));
+  if(!Object.keys(value).length){const hint=document.createElement('small');hint.textContent='ยังไม่มีฟิลด์ กำหนดข้อมูลในไฟล์เคสของโปรเจกต์';wrap.append(hint);}
+  return wrap;
+ }
+ const label=document.createElement('label');label.textContent=labelText;
+ const input=document.createElement(typeof value==='boolean'?'select':'input');
+ if(typeof value==='boolean'){for(const v of ['true','false']){const option=document.createElement('option');option.value=v;option.textContent=v;input.append(option);}input.value=String(value);}
+ else {input.type=typeof value==='number'?'number':'text';if(input.type==='number')input.step='any';input.value=value??'';if(value===null){input.disabled=true;input.placeholder='null — กำหนดชนิดในไฟล์เคส';}}
+ input.oninput=()=>{if(typeof value==='boolean')parent[key]=input.value==='true';else if(typeof value==='number'){input.setCustomValidity(input.value===''||!Number.isFinite(Number(input.value))?'กรุณากรอกตัวเลข':'');if(input.checkValidity())parent[key]=Number(input.value);}else parent[key]=input.value;};
+ label.append(input);wrap.append(label);return wrap;
+}
+function draw(){
+ for(const key of ['runName','platform','loginMethod','phoneNumber','email'])$(key).value=config[key]??'';
+ $('shouldLogin').checked=config.shouldLogin??true;$('continueOnFail').checked=!!config.shouldContinueNextCaseWhenFail;
+ const list=$('cases');list.replaceChildren();
+ (config.testCases??[]).forEach((entry,index)=>{
+  const row=document.createElement('div');row.className='case-card';row.dataset.index=index;
+  const header=document.createElement('div');header.className='case';
+  const handle=document.createElement('button');handle.className='secondary drag-handle';handle.textContent='⠿';handle.title='ลากเพื่อสลับลำดับ';handle.setAttribute('aria-label','ลากเคส '+(index+1));handle.draggable=true;
+  handle.ondragstart=event=>{if(running||pending){event.preventDefault();return;}dragIndex=index;event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(index));row.classList.add('dragging');};
+  handle.ondragend=()=>{dragIndex=null;document.querySelectorAll('.case-card').forEach(el=>el.classList.remove('drop-target','dragging'));};
+  row.ondragover=event=>{if(dragIndex===null||running||pending)return;event.preventDefault();event.dataTransfer.dropEffect='move';row.classList.add('drop-target');};
+  row.ondragleave=()=>row.classList.remove('drop-target');
+  row.ondrop=event=>{event.preventDefault();if(dragIndex!==null)move(dragIndex,index);dragIndex=null;};
+  header.append(handle);const label=document.createElement('span');label.textContent=(index+1)+'. '+entry.case.id;header.append(label);
+  for(const [text,offset]of [['↑',-1],['↓',1],['ลบ',0]]){const button=document.createElement('button');button.className='secondary';button.textContent=text;button.setAttribute('aria-label',text+' เคส '+(index+1));button.disabled=offset!==0&&(index+offset<0||index+offset>=config.testCases.length);button.onclick=()=>{if(offset)move(index,index+offset);else{config=collect();config.testCases.splice(index,1);draw();}};header.append(button);}
+  row.append(header);
+  if(entry.case.additionalData!==undefined){const fields=additionalFields(entry.case.additionalData,entry.case,'additionalData','ข้อมูลเฉพาะเคส');fields.className='additional';row.append(fields);}
+  list.append(row);
+ });
+}
+async function action(fn){if(pending)return;pending=true;controls();try{await fn();}catch(error){notice(error.message);}finally{pending=false;controls();}}
+async function save(){for(const input of $('fields').querySelectorAll('input'))if(!input.reportValidity())throw Error('กรุณาตรวจข้อมูลที่กรอก');config=collect();const result=await api('config','POST',config);draw();notice(result.message);}
+$('save').onclick=()=>action(save);$('start').onclick=()=>action(async()=>{await save();notice((await api('run/start','POST',{})).message);running=true;await poll();});$('appiumStart').onclick=()=>action(async()=>{notice((await api('appium/start','POST',{})).message);await poll();});
+$('add').onclick=()=>{config=collect();const source=catalog[Number($('casePicker').value)];if(!source)return;config.testCases.push(structuredClone(source.entry));draw();};
+async function poll(){try{const data=await api('status');ready=data.appium==='ready';running=data.run.status==='running';$('appiumStatus').textContent=({ready:'พร้อมใช้งาน',offline:'ยังไม่เปิด',starting:'กำลังเปิด',unavailable:'ไม่พร้อมใช้งาน'})[data.appium];$('appiumStatus').className='badge '+data.appium;$('runStatus').textContent=({idle:'ยังไม่เริ่ม',running:'กำลังทดสอบ'})[data.run.status]??data.run.status;$('runStatus').className='badge '+data.run.status;for(const kind of ['run','appium']){const el=$(kind+'Log');if(data.logs[kind]&&el.textContent!==data.logs[kind]){const bottom=el.scrollTop+el.clientHeight>=el.scrollHeight-30;el.textContent=data.logs[kind];if(bottom)el.scrollTop=el.scrollHeight;}}}catch(error){ready=false;notice('เชื่อมต่อ Dashboard ไม่ได้: '+error.message);}controls();}
+(async()=>{try{const data=await api('config');config=data.config;catalog=data.cases;catalog.forEach((item,index)=>{const option=document.createElement('option');option.value=String(index);option.textContent=item.name;$('casePicker').append(option);});$('add').disabled=!catalog.length;draw();loaded=true;}catch(error){notice(error.message);}await poll();setInterval(poll,2000);})();
+</script></html>

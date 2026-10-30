@@ -1,3 +1,4 @@
+import ExcelJS from 'exceljs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, readFile, writeFile, rm, mkdir } from 'node:fs/promises';
@@ -21,6 +22,13 @@ test('saves raw result, escaped report and ordered journal; duplicate IDs remain
   const raw = JSON.parse(await readFile(join(result.resultLocation, 'result.json'), 'utf8'));
   assert.deepEqual(raw.cases.map(c => c.executionIndex), [1, 2]);
   assert.equal(raw.status, 'PASS');
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(join(result.resultLocation, 'report.xlsx'));
+  assert.deepEqual(workbook.worksheets.map(sheet => sheet.name), ['สรุปผล', 'รายเคส', 'ลำดับการทำงาน']);
+  assert.equal(workbook.getWorksheet('สรุปผล').getCell('B6').value, raw.status);
+  assert.equal(workbook.getWorksheet('รายเคส').getCell('A6').value, 2);
+  assert.equal(workbook.getWorksheet('รายเคส').getCell('C6').value, 'PASS');
+
   assert.deepEqual(raw.timeline.map(e => e.event), ['runStarted', 'caseStarted']);
   const journal = (await readFile(join(result.resultLocation, 'journal.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse);
   assert.deepEqual(journal.map(e => e.event), ['runStarted', 'caseStarted', 'runFinished']);

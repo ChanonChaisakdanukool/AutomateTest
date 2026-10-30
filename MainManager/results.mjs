@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile, rename, appendFile, readdir, access, mkdtem
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
+import { createExcelReport } from './excel-report.mjs';
 import { runAutomation } from './runner.mjs';
 
 const defaultRoot = fileURLToPath(new URL('../Results/', import.meta.url));
@@ -17,7 +18,7 @@ function thaiTime(value) {
 }
 
 /** ใช้เหตุการณ์จริง; รายงานเก่าใช้เวลาเริ่ม–จบที่บันทึกในผลเคส */
-function renderTimeline(result) {
+export function getTimelineEntries(result) {
   const events = result.timeline ?? [
     { event: 'runStarted', at: result.startedAt },
     ...result.cases.flatMap(item => [
@@ -41,7 +42,11 @@ function renderTimeline(result) {
     entries.push([null, `ไม่ได้รันเคส #${item.executionIndex} ${item.caseId}`, 'SKIPPED']);
   }
   entries.push([result.finishedAt, 'จบชุดทดสอบ', result.status]);
-  return entries.map(([at, description, status]) => `<tr><td>${escapeHtml(thaiTime(at))}</td><td>${escapeHtml(description)}</td><td>${escapeHtml(status)}</td></tr>`).join('');
+  return entries;
+}
+
+function renderTimeline(result) {
+  return getTimelineEntries(result).map(([at, description, status]) => `<tr><td>${escapeHtml(thaiTime(at))}</td><td>${escapeHtml(description)}</td><td>${escapeHtml(status)}</td></tr>`).join('');
 }
 
 /** รายงานอ่านจากผลดิบเท่านั้น ไม่ฝัง Config หรือ additionalData */
@@ -59,7 +64,7 @@ export function renderReport(result) {
 <p>เวลาไทย (UTC+7) · PASS = ผ่าน · FAIL = พฤติกรรมไม่ตรงตามคาด · ERROR = ระบบทำงานผิดพลาด · SKIPPED = ไม่ได้รัน</p>
 <table><thead><tr><th>วันและเวลา</th><th>เหตุการณ์</th><th>ผล</th></tr></thead><tbody>${renderTimeline(result)}</tbody></table>
 <h2>ข้อผิดพลาดระดับชุดทดสอบ</h2><pre>${escapeHtml(JSON.stringify(result.errors, null, 2))}</pre>
-<p>ยังไม่ได้เก็บ Screenshot / Video และ Step History ในรุ่นนี้</p><p><a href="result.json">ผลดิบ JSON</a> · <a href="journal.jsonl">Journal</a></p></html>`;
+<p>ยังไม่ได้เก็บ Screenshot / Video และ Step History ในรุ่นนี้</p><p><a href="report.xlsx">ดาวน์โหลด Excel</a> · <a href="result.json">ผลดิบ JSON</a> · <a href="journal.jsonl">Journal</a></p></html>`;
 }
 
 async function atomicWrite(path, content) {
@@ -137,6 +142,10 @@ export async function runWithResults(options, {
     summary = await run({ ...resolvedOptions, onEvent: async event => {
       const recordedEvent = structuredClone({ ...event, at: new Date().toISOString() });
       timeline.push(recordedEvent);
+      if (process.env.AUTOMATION_PROGRESS === '1') {
+        const item = event.result ?? event;
+        console.log(`[${recordedEvent.at}] ${event.event} #${item.executionIndex ?? '-'} ${item.caseId ?? ''} ${item.status ?? ''}`);
+      }
       try {
         await appendFile(join(location.folder, 'journal.jsonl'), JSON.stringify(recordedEvent) + '\n');
       } catch (error) {
@@ -156,6 +165,7 @@ export async function runWithResults(options, {
   };
   try {
     if (storageError) throw storageError;
+    await atomicWrite(join(location.folder, 'report.xlsx'), await createExcelReport(result, getTimelineEntries(result)));
     await atomicWrite(join(location.folder, 'report.html'), renderReport(result));
     await appendFile(join(location.folder, 'journal.jsonl'), JSON.stringify({ event: 'runFinished', at: result.finishedAt, status: result.status }) + '\n');
     await atomicWrite(join(location.folder, 'result.json'), JSON.stringify(result, null, 2) + '\n');
