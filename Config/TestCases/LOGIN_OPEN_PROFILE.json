@@ -1,5 +1,6 @@
 {
   "case": {
-    "id": "LOGIN_OPEN_PROFILE"
+    "id": "LOGIN_OPEN_PROFILE",
+    "additionalData": {}
   }
 }

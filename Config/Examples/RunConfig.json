@@ -4,14 +4,18 @@
   "shouldContinueNextCaseWhenFail": false,
   "testCases": [
     {
-      "file": "../TestCases/LOGIN_OPEN_PROFILE.json"
+      "case": {
+        "id": "LOGIN_OPEN_PROFILE",
+        "additionalData": {
+          "loginMethod": "phone",
+          "phoneNumber": "REPLACE_WITH_TEST_PHONE_NUMBER",
+          "otp": "111111"
+        }
+      }
     },
     {
       "file": "../TestCases/LOGIN_OPEN_PROFILE_CANCEL.json"
     }
   ],
-  "shouldLogin": true,
-  "loginMethod": "phone",
-  "phoneNumber": "REPLACE_WITH_TEST_PHONE_NUMBER",
-  "email": "REPLACE_WITH_TEST_EMAIL"
+  "shouldLogin": true
 }

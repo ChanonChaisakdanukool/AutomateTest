@@ -14,14 +14,14 @@ Launcher อ่าน RunConfig โดยไม่ถามเลือกไฟ
 
 ## Config และเคส
 
-RunConfig เก็บ runName, shouldContinueNextCaseWhenFail, platform, ค่ากลาง Login และ testCases โดยอ้าง { "file": "../TestCases/LOGIN_OPEN_PROFILE.json" } หรือใช้ inline { "case": { "id": "LOGIN_OPEN_PROFILE" } }
+RunConfig เก็บ runName, shouldContinueNextCaseWhenFail, platform, shouldLogin และ testCases โดยอ้าง { "file": "../TestCases/LOGIN_OPEN_PROFILE.json" } หรือใช้ inline { "case": { "id": "LOGIN_OPEN_PROFILE" } }
 
 เส้นทางไฟล์เคสอ้างจากโฟลเดอร์ RunConfig โหลดทุกไฟล์และตรวจ Registry ก่อนเปิด session แต่ละไฟล์มี case เดียว additionalData เป็น optional สำหรับข้อมูลเฉพาะเคส ไม่ต้องใส่เมื่อไม่มีข้อมูล
 
 - LOGIN_OPEN_PROFILE: รอ Main → กด Profile → รอ Popup → Confirm → รอ Popup หาย ยังไม่ยืนยันหน้าปลายทางหรือ Login สำเร็จ
 - LOGIN_OPEN_PROFILE_CANCEL: รอ Main → กด Profile → Cancel → รอ Popup หาย → ตรวจ Main visible
 
-ทั้งสองเป็น Script ใน Scripts/Login ใช้ Pages ร่วมกัน ไม่มี Reuse Login และไม่รับ popupSelection/popupAction จาก Config shouldLogin ไม่ใช้ข้ามสองเคสนี้ ค่ากลาง loginConfig ยังคงส่งให้ Script เพื่อใช้ต่อในอนาคต
+ทั้งสองเป็น Script ใน Scripts/Login ใช้ Pages ร่วมกัน ไม่มี Reuse Login และไม่รับ popupSelection/popupAction จาก Config shouldLogin ไม่ใช้ข้ามสองเคสนี้ loginConfig ส่งเฉพาะ shouldLogin ส่วนวิธี Login และข้อมูลติดต่ออยู่ใน additionalData ของ LOGIN_OPEN_PROFILE
 
 ## โครงสร้าง
 
@@ -94,3 +94,12 @@ export async function exampleCase({ core, journey }) {
 ใช้ Step ID ที่เสถียร ชื่อที่ QA อ่านเข้าใจ และไม่ใส่รหัสผ่าน/OTP ในชื่อ Step
 
 ชื่อ Journey ของ Page/Script ใช้ Localization/localized.mjs ภาษาไทยกลาง เช่น localized.wait(pageId), localized.tap(buttonId) และ localized.expectVisible(pageId) โดย Page ส่ง labels ให้ Script ใช้ร่วมกัน ดู Localization/README.md
+
+
+## AdditionalData แบบ Schema
+
+loginMethod / phoneNumber / email ย้ายมาอยู่ใน additionalData ของ LOGIN_OPEN_PROFILE แล้ว ไม่รับที่ RunConfig ระดับบน ส่วน shouldLogin ยังคงเดิม
+ไฟล์ Schema: Scripts/Login/additional-data-schema.mjs; กลไก Renderer/Validator ร่วม: Shared/additional-data.mjs และ Dashboard/schema-form.mjs
+เลือกวิธี Login ในแต่ละแถว phone/email แล้วกรอกช่องที่เกี่ยวข้อง หากไม่เลือกจะไม่บันทึก loginMethod ไม่มีค่า none
+รองรับ enum ตามเงื่อนไขซ้อนและ object แบบ recursive อ่านรายละเอียด Shared/README.md
+Script Login ยังทำงานถึงยืนยัน Popup ตามเดิม รอบนี้เพิ่มการตั้งค่าและตรวจข้อมูล การกรอกเบอร์/อีเมล/OTP จะต่อในขั้นถัดไป

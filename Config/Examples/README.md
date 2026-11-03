@@ -5,7 +5,7 @@
 - RunConfig.json: ค่ากลางและลำดับเคส คัดลอกไป ../Local/RunConfig.json
 - ../TestCases/LOGIN_OPEN_PROFILE.json: definition ของเคสที่ RunConfig อ้างถึง
 
-แทน REPLACE_WITH_ ด้วยข้อมูลจริงก่อนรัน ไม่ต้องใช้ TestCaseConfig.json หรือ TestCaseConfig.login.json แบบเดิมแล้ว ค่าเฉพาะเคสใส่ additionalData ในไฟล์เคส ไม่ใส่ข้อมูล Login กลางซ้ำ
+แทน REPLACE_WITH_ ด้วยข้อมูลจริงก่อนรัน ไม่ต้องใช้ TestCaseConfig.json หรือ TestCaseConfig.login.json แบบเดิมแล้ว ค่าเฉพาะเคสใส่ additionalData ในไฟล์เคส ข้อมูลวิธี Login/เบอร์โทร/อีเมลเป็น additionalData ของ LOGIN_OPEN_PROFILE ไม่อยู่ระดับบนของ RunConfig
 
 testCases ใน RunConfig ใช้ { "file": "../TestCases/LOGIN_OPEN_PROFILE.json" } ได้ path ยังถูกต้องเมื่อคัดลอก RunConfig จาก Examples ไป Local เพราะทั้งสองโฟลเดอร์อยู่ระดับเดียวกัน
 

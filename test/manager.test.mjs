@@ -89,17 +89,17 @@ test('core setup failure still closes the session', async t => {
   assert.equal(f.calls.at(-1), 'delete');
 });
 
-test('run login config reaches every case independently from additionalData', async t => {
+test('shouldLogin remains shared while each case owns additionalData', async t => {
   const f = await fixture(t);
   const { readFile } = await import('node:fs/promises');
   const config = JSON.parse(await readFile(f.options.testCasePath, 'utf8'));
-  Object.assign(config, { shouldLogin: true, loginMethod: 'phone', phoneNumber: '0800000000', email: 'test@example.com' });
+  Object.assign(config, { shouldLogin: true });
   config.testCases[0].case.additionalData.phoneNumber = 'case-only';
   await writeFile(f.options.testCasePath, JSON.stringify(config));
   let executions = 0;
   f.registry.set('one', async ({ loginConfig, additionalData }) => {
-    assert.equal(loginConfig.phoneNumber, '0800000000');
-    assert.equal(loginConfig.loginMethod, 'phone');
+    assert.equal(loginConfig.phoneNumber, undefined);
+    assert.equal(loginConfig.loginMethod, undefined);
     assert.equal(loginConfig.shouldLogin, true);
     if (executions++ === 0) assert.equal(additionalData.phoneNumber, 'case-only');
     loginConfig.phoneNumber = 'changed';

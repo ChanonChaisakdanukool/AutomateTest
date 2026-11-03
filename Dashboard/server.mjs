@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { spawn, execFile } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import { caseRegistry } from '../MainManager/case-registry.mjs';
+import { caseRegistry, caseSchemas } from '../MainManager/case-registry.mjs';
 import { loadTestCaseConfig } from '../MainManager/testcase-config.mjs';
 import { loadDeviceConfig } from '../MainManager/device-config.mjs';
 import { selectDeviceConfig } from '../MainManager/runner.mjs';
@@ -112,7 +112,8 @@ async function saveConfig(config) {
   await mkdir(join(root, 'Config/Local'), { recursive: true });
   try {
     await writeFile(temporary, JSON.stringify(config, null, 2) + '\n', { mode: 0o600, flag: 'wx' });
-    await loadTestCaseConfig(temporary, caseRegistry);
+    const validated = await loadTestCaseConfig(temporary, caseRegistry);
+    await writeFile(temporary, JSON.stringify(validated, null, 2) + '\n', { mode: 0o600 });
     selectDeviceConfig(config.platform);
     await rename(temporary, configPath);
   } finally { await rm(temporary, { force: true }); }
@@ -144,6 +145,11 @@ const server = http.createServer(async (req, res) => {
       });
       return res.end(page.replace('__TOKEN__', token).replace('__WEB_LOCALIZED__', JSON.stringify(webLocalized).replace(/</g, '\\u003c')));
     }
+    const modules = { '/Shared/additional-data.mjs': '../Shared/additional-data.mjs', '/Dashboard/schema-form.mjs': './schema-form.mjs' };
+    if (req.method === 'GET' && Object.hasOwn(modules, req.url)) {
+      res.writeHead(200, { 'Content-Type': 'text/javascript; charset=utf-8' });
+      return res.end(await readFile(new URL(modules[req.url], import.meta.url)));
+    }
     if (req.headers['x-dashboard-token'] !== token) return json(403, { error: 'Invalid token' });
     if (req.method === 'GET' && req.url === '/api/config') {
       let config;
@@ -163,7 +169,7 @@ const server = http.createServer(async (req, res) => {
         throw error;
       });
       config = await loadTestCaseConfig(sourcePath, caseRegistry);
-      return json(200, { config, cases });
+      return json(200, { config, cases, schemas: Object.fromEntries(caseSchemas) });
     }
     const url = new URL(req.url, origin);
     if (req.method === 'GET' && url.pathname === '/api/device') {

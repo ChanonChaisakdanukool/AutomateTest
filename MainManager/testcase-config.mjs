@@ -1,3 +1,4 @@
+import { normalizeAdditionalData } from '../Shared/additional-data.mjs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 
@@ -9,26 +10,10 @@ export function getLoginConfig(config) {
   if (typeof shouldLogin !== 'boolean') {
     throw new TypeError('shouldLogin must be boolean.');
   }
-  if (config.loginMethod !== undefined && !['phone', 'email'].includes(config.loginMethod)) {
-    throw new TypeError('loginMethod must be phone or email.');
+  for (const key of ['loginMethod', 'phoneNumber', 'email']) {
+    if (Object.hasOwn(config, key)) throw new TypeError(`${key} belongs in LOGIN_OPEN_PROFILE.additionalData, not RunConfig`);
   }
-  for (const key of ['phoneNumber', 'email']) {
-    if (config[key] !== undefined && (typeof config[key] !== 'string' || !config[key].trim())) {
-      throw new TypeError(`${key} must be a non-empty string.`);
-    }
-  }
-  if (shouldLogin && config.loginMethod) {
-    const requiredField = config.loginMethod === 'phone' ? 'phoneNumber' : 'email';
-    if (!config[requiredField]) {
-      throw new TypeError(`${requiredField} is required for the selected loginMethod.`);
-    }
-  }
-  return {
-    shouldLogin,
-    loginMethod: config.loginMethod,
-    phoneNumber: config.phoneNumber,
-    email: config.email,
-  };
+  return { shouldLogin };
 }
 
 /** ตรวจทุกเคสก่อนสร้าง session เพื่อไม่ให้รันไปครึ่งทางแล้วพบ config ผิด */
@@ -54,6 +39,8 @@ export function validateTestCaseConfig(config, registry) {
     if (typeof registry.get(definition.id) !== 'function') {
       throw new TypeError(`Case is not registered: ${definition.id}`);
     }
+    const schema = registry.schemas?.get(definition.id);
+    if (schema) definition.additionalData = normalizeAdditionalData(schema, definition.additionalData);
     if (definition.additionalData !== undefined && !isObject(definition.additionalData)) {
       throw new TypeError(`additionalData must be an object: ${definition.id}`);
     }
