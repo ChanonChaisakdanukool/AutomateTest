@@ -1,3 +1,4 @@
+import { webLocalized } from '../Localization/web-th.mjs';
 import http from 'node:http';
 import { promisify, stripVTControlCharacters } from 'node:util';
 import { readFile, readdir, realpath, writeFile, rename, rm, mkdir } from 'node:fs/promises';
@@ -136,7 +137,12 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && req.url === '/') {
       const html = await readFile(new URL('./index.html', import.meta.url), 'utf8');
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      return res.end(html.replace('__TOKEN__', token));
+      const escape = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+      const page = html.replace(/\{\{web\.(\w+)\}\}/g, (_, key) => {
+        if (!Object.hasOwn(webLocalized, key)) throw new Error(`Missing web localized key: ${key}`);
+        return escape(webLocalized[key]);
+      });
+      return res.end(page.replace('__TOKEN__', token).replace('__WEB_LOCALIZED__', JSON.stringify(webLocalized).replace(/</g, '\\u003c')));
     }
     if (req.headers['x-dashboard-token'] !== token) return json(403, { error: 'Invalid token' });
     if (req.method === 'GET' && req.url === '/api/config') {
@@ -191,12 +197,12 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === 'GET' && req.url === '/api/status') return json(200, { appium: await appiumStatus(), run: runState, logs });
     if (req.method === 'POST' && req.url === '/api/appium/stop') {
-      if (stopping || busy) return json(409, { error: 'กำลังดำเนินการ กรุณารอสักครู่' });
+      if (stopping || busy) return json(409, { error: webLocalized.working });
       await stopAll();
-      return json(200, { message: 'หยุดการทดสอบและปิด Appium แล้ว' });
+      return json(200, { message: webLocalized.stoppedAll });
     }
     if (req.method !== 'POST' || !['/api/config', '/api/device', '/api/appium/start', '/api/run/start'].includes(req.url)) return json(404, { error: 'Not found' });
-    if (busy || run || stopping) return json(409, { error: 'กำลังทำงาน กรุณารอให้จบก่อน' });
+    if (busy || run || stopping) return json(409, { error: webLocalized.busy });
     busy = true;
     try {
       if (req.url === '/api/device') {
@@ -211,26 +217,50 @@ const server = http.createServer(async (req, res) => {
           if (typeof identity !== 'string' || !identity.trim() || identity.includes('REPLACE_WITH_')) throw new Error('กรุณาระบุ Bundle ID / App Package สำหรับเปิดแอปหลังจบเคส');
           await rename(temp, path);
         } finally { await rm(temp, { force: true }); }
-        return json(200, { message: 'บันทึก Device Config แล้ว' });
+        return json(200, { message: webLocalized.savedDevice });
       }
-      if (req.url === '/api/config') { await saveConfig(await body(req)); return json(200, { message: 'บันทึก RunConfig แล้ว' }); }
+      if (req.url === '/api/config') { await saveConfig(await body(req)); return json(200, { message: webLocalized.savedConfig }); }
       if (req.url === '/api/appium/start') {
-        if (await appiumStatus() === 'ready') return json(200, { message: 'Appium พร้อมใช้งานอยู่แล้ว' });
-        if (appium) return json(200, { message: 'กำลังเปิด Appium' });
+        if (await appiumStatus() === 'ready') return json(200, { message: webLocalized.alreadyReady });
+        if (appium) return json(200, { message: webLocalized.opening });
         appium = launch('appium', ['node_modules/appium/build/lib/main.js', '--address', '127.0.0.1', '--port', '4723']);
-        return json(200, { message: 'กำลังเปิด Appium' });
+        return json(200, { message: webLocalized.opening });
       }
-      if (await appiumStatus() !== 'ready') return json(409, { error: 'กรุณาเปิด Appium และรอสถานะพร้อมก่อน' });
+      if (await appiumStatus() !== 'ready') return json(409, { error: webLocalized.needAppium });
       const config = await loadTestCaseConfig(configPath, caseRegistry);
       const device = await loadDeviceConfig(selectDeviceConfig(config.platform));
       if (device.config.platform !== config.platform) throw new Error('Device Config platform ไม่ตรงกัน');
       runState = { status: 'running', exitCode: null };
       run = launch('run', ['MainManager/run.mjs']);
-      return json(200, { message: 'เริ่มทดสอบแล้ว ดู log ด้านล่าง' });
+      return json(200, { message: webLocalized.startedRun });
     } finally { busy = false; }
   } catch (error) { json(400, { error: error.message }); }
 });
-server.on('error', error => { console.error(error.message); process.exitCode = 1; });
+server.on('error', async error => {
+  if (error.code === 'EADDRINUSE') {
+    try {
+      const response = await fetch(origin, { signal: AbortSignal.timeout(3000) });
+      const html = await response.text();
+      if (!response.ok || !html.includes('<title>Automation Dashboard</title>') || !/const token='[a-f0-9]{64}'/.test(html)) {
+        throw new Error('Port is occupied by another service');
+      }
+      console.log(`Dashboard เปิดอยู่แล้ว กำลังเปิดหน้าเว็บ: ${origin}`);
+      if (process.platform === 'darwin' && process.env.DASHBOARD_NO_OPEN !== '1') {
+        spawn('open', [origin], { stdio: 'ignore' }).on('error', openError => {
+          console.error(`เปิด Browser ไม่สำเร็จ กรุณาเปิด ${origin}: ${openError.message}`);
+          process.exitCode = 1;
+        });
+      }
+      return;
+    } catch {
+      console.error(`พอร์ต ${port} ถูกใช้งาน แต่ตรวจไม่พบ Automation Dashboard กรุณาตรวจโปรแกรมที่ใช้พอร์ตนี้`);
+      process.exitCode = 1;
+      return;
+    }
+  }
+  console.error(error.message);
+  process.exitCode = 1;
+});
 server.listen(port, '127.0.0.1', () => {
   console.log(`Dashboard: ${origin}\nKeep this window open. Control+C closes dashboard and its child processes.`);
   if (process.platform === 'darwin' && process.env.DASHBOARD_NO_OPEN !== '1') spawn('open', [origin], { stdio: 'ignore' }).on('error', () => {});

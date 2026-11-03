@@ -16,5 +16,13 @@ count เริ่ม 0001 และเพิ่มเมื่อชื่อ�
 เขียนผลหลักผ่านไฟล์ชั่วคราวแล้ว rename; หาก Journal เขียนไม่ได้ให้หยุดและปิด session หากมี จากนั้นลองเขียนผลสำรองใน temporary directory ของระบบ (`automate-result-*`) และพิมพ์ตำแหน่งจริงใน Terminal หากสำรองไม่ได้จะแสดง resultSaveFailed และผลใน Terminal
 ผลสำรองอาจถูกระบบล้าง และไม่ได้ป้องกันดิสก์เดียวกันเต็ม
 
-ยังไม่เก็บภาพ วิดีโอ Step History, Build/Contract metadata และยังไม่มีนโยบายล้างผล/ตรวจพื้นที่ว่างล่วงหน้า รุ่นนี้ตรวจความสามารถเขียนจริงก่อนเปิด session ไม่คัดลอก Config หรือ additionalData แต่ข้อความ Error อาจมีข้อมูลจากแอป ควรตรวจเนื้อหาก่อนแชร์
+ยังไม่เก็บภาพ วิดีโอ และ Build/Contract metadata และยังไม่มีนโยบายล้างผล/ตรวจพื้นที่ว่างล่วงหน้า รุ่นนี้ตรวจความสามารถเขียนจริงก่อนเปิด session ไม่คัดลอก Config หรือ additionalData แต่ข้อความ Error อาจมีข้อมูลจากแอป ควรตรวจเนื้อหาก่อนแชร์
 ผลจาก unit tests ใช้ mock และเขียนใน temporary directory ไม่ใช่หลักฐานจากแอปจริง
+
+
+## Journey ราย Step
+
+Script ใช้ `journey.run([{ id, name, action }])` กำหนดแผนก่อนทำงาน Runner ส่ง Journey แยกต่อ execution และบันทึก `cases[].steps` พร้อม `failedStep` เมื่อ Step เป็น FAIL/ERROR
+HTML/Dashboard แสดง Journey แยกแต่ละเคส Excel มีแผ่นงาน Journey ราย Step JSON เก็บ steps และ Journal เก็บ stepStarted/stepFinished ระหว่างทำงาน
+เฉพาะ assertion mismatch เป็น FAIL; ระบบผิดพลาดเป็น ERROR ขั้นตอนที่ยังไม่ทำเป็น SKIPPED โดยไม่สร้างเวลาเริ่มสมมุติ หยุดและส่ง error เดิมต่อ ไม่มี retry และไม่เก็บ return value/ข้อมูลที่กรอกลง Step โดยอัตโนมัติ
+ตอนนี้ Login ทั้งสองเคสมีแผน Step แล้ว Script อื่นต้องระบุ Journey เพิ่มเอง รายงานเก่าไม่มีรายละเอียด Step ย้อนหลัง

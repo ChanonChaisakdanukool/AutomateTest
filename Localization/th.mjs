@@ -1,0 +1,21 @@
+/** ข้อความ Journey ภาษาไทยกลาง ใช้ {id} แทน ID จาก contract */
+export const th = Object.freeze({
+  wait: 'รอหน้า {id}',
+  findElement: 'ค้นหา {id}',
+  findByScrolling: 'เลื่อนค้นหา {id} ภายใน {containerId}',
+  waitForVisible: 'รอให้แสดง {id}',
+  waitForHidden: 'รอให้ซ่อน {id}',
+  tap: 'กด {id}',
+  inputText: 'กรอกข้อความใน {id}',
+  clearText: 'ล้างข้อความใน {id}',
+  getText: 'อ่านข้อความจาก {id}',
+  getValue: 'อ่านค่าจาก {id}',
+  isVisible: 'ตรวจการมองเห็นของ {id}',
+  isEnabled: 'ตรวจสถานะพร้อมใช้งานของ {id}',
+  expectVisible: 'ตรวจว่ามองเห็น {id}',
+  expectText: 'ตรวจข้อความของ {id}',
+  expectValue: 'ตรวจค่าของ {id}',
+  switchToNative: 'เปลี่ยนไป Native',
+  switchToWebView: 'เปลี่ยนไป WebView',
+  sequence: '{first} และ{next}',
+});

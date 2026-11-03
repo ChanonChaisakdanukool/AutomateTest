@@ -1,3 +1,4 @@
+import { localized } from '../../Localization/localized.mjs';
 import { ElementIds } from 'shared-element-ids';
 
 /** Popup ยืนยันก่อนเปิดหน้า Login */
@@ -30,5 +31,16 @@ export function createLoginConfirmPopup(core) {
     await select('cancel');
   }
 
-  return { select, confirm, cancel };
+  const labels = Object.freeze({
+    confirm: localized.sequence(
+      localized.tap(ids.loginConfirmPopupConfirmButton),
+      localized.waitForHidden(ids.loginConfirmPopupView),
+    ),
+    cancel: localized.sequence(
+      localized.tap(ids.loginConfirmPopupCancelButton),
+      localized.waitForHidden(ids.loginConfirmPopupView),
+    ),
+  });
+
+  return { select, confirm, cancel, labels };
 }

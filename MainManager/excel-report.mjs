@@ -25,6 +25,7 @@ export async function createExcelReport(result, timeline) {
   const overview = workbook.addWorksheet('สรุปผล');
   const cases = workbook.addWorksheet('รายเคส');
   const history = workbook.addWorksheet('ลำดับการทำงาน');
+  const journey = workbook.addWorksheet('Journey ราย Step');
   overview.columns = [{ width: 30 }, { width: 100 }];
   overview.addRows([
     [], ['ผลทดสอบ Automation'], [],
@@ -33,7 +34,7 @@ export async function createExcelReport(result, timeline) {
     ['เริ่ม (เวลาไทย UTC+7)', thaiDate(result.startedAt)],
     ['จบ (เวลาไทย UTC+7)', thaiDate(result.finishedAt)],
     ['ระยะเวลา (ms)', result.durationMs], [],
-    ['หลักฐาน', 'ยังไม่เก็บ Screenshot / Video / Step History'],
+    ['หลักฐาน', 'ยังไม่เก็บ Screenshot / Video; Journey ตาม Step ที่ Script กำหนด'],
     [], ['ข้อผิดพลาดระดับชุดทดสอบ', 'รายละเอียด'],
     ...(result.errors.length ? result.errors.map(error => [error.phase ?? 'ไม่ระบุ', error.message ?? '']) : [['ไม่มี', '']]),
     [], ['รอบที่ยังไม่มีผลสุดท้าย', (result.incompleteRuns ?? []).join('\n') || 'ไม่มี'],
@@ -52,6 +53,11 @@ export async function createExcelReport(result, timeline) {
   history.addRow([]); history.addRow(['ลำดับการทำงาน']); history.addRow([]);
   table(history, 4, ['เวลาไทย (UTC+7)', 'เหตุการณ์', 'ผล'], timeline.map(([at, label, status]) => [thaiDate(at), label, status]));
   history.getColumn(1).numFmt = dateFormat;
+  journey.columns = [10, 42, 10, 28, 48, 14, 24, 24, 18, 85].map(width => ({ width }));
+  journey.addRow([]); journey.addRow(['Journey ราย Step']); journey.addRow([]);
+  table(journey, 4, ['ลำดับเคส', 'Case ID', 'ลำดับ Step', 'Step ID', 'ขั้นตอน', 'ผล', 'เริ่ม (ไทย UTC+7)', 'จบ (ไทย UTC+7)', 'ระยะเวลา (ms)', 'รายละเอียดปัญหา'],
+    result.cases.flatMap(item => (item.steps?.length ? item.steps : [{ stepName: 'ยังไม่มีการบันทึก Step', status: 'NOT_RECORDED' }]).map(step => [item.executionIndex, item.caseId, step.stepIndex ?? null, step.stepId ?? '', step.stepName, step.status, thaiDate(step.startedAt), thaiDate(step.finishedAt), step.durationMs ?? null, step.error?.message ?? ''])));
+  journey.getColumn(7).numFmt = dateFormat; journey.getColumn(8).numFmt = dateFormat;
   for (const sheet of workbook.worksheets) {
     sheet.eachRow(row => {
       row.eachCell(cell => {

@@ -1,10 +1,11 @@
 import { fileURLToPath } from 'node:url';
 import { elementLocators } from '../Config/element-locators.mjs';
 import { remote } from 'webdriverio';
-import { createCore, CoreError } from '../Core/index.mjs';
+import { createCore } from '../Core/index.mjs';
 import { TIMEOUTS } from '../Config/timeouts.mjs';
 import { loadDeviceConfig } from './device-config.mjs';
 import { loadTestCaseConfig, getLoginConfig } from './testcase-config.mjs';
+import { createJourney, classifyFailure } from './journey.mjs';
 import { caseRegistry } from './case-registry.mjs';
 
 /** เลือก profile หลักต่อ platform จากโฟลเดอร์ Local ของโปรเจกต์ */
@@ -100,7 +101,7 @@ export async function runAutomation({
 
     for (const [index, entry] of testConfig.testCases.entries()) {
       const definition = entry.case;
-      const result = { executionIndex: index + 1, caseId: definition.id, status: 'PASS' };
+      const result = { executionIndex: index + 1, caseId: definition.id, status: 'PASS', steps: [] };
       phase = 'caseExecution';
       const caseStart = performance.now();
       result.startedAt = new Date().toISOString();
@@ -110,6 +111,7 @@ export async function runAutomation({
         // Clone ต่อ execution ป้องกันเคสแก้ข้อมูลแล้วส่งผลต่อ duplicate case ถัดไป
         await registry.get(definition.id)({
           core,
+          journey: createJourney({ steps: result.steps, context: { executionIndex: index + 1, caseId: definition.id }, onEvent }),
           loginConfig: structuredClone(loginConfig),
           additionalData: structuredClone(definition.additionalData ?? {}),
           executionIndex: index + 1,
@@ -117,8 +119,10 @@ export async function runAutomation({
       } catch (error) {
         // เฉพาะ assertion ที่อ่านค่าแล้วไม่ตรงเท่านั้นเป็น FAIL
         // หาไม่พบ/timeout ยังไม่ยืนยันสาเหตุ จึงรายงาน ERROR ใน runner ขั้นพื้นฐาน
-        result.status = error instanceof CoreError && error.code === 'ASSERTION_MISMATCH' ? 'FAIL' : 'ERROR';
+        result.status = classifyFailure(error);
         result.error = describeError(error);
+        const failedStep = result.steps.find(step => ['FAIL', 'ERROR'].includes(step.status));
+        if (failedStep) result.failedStep = failedStep.stepId;
       }
       result.finishedAt = new Date().toISOString();
       result.durationMs = Math.round(performance.now() - caseStart);

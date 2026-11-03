@@ -24,7 +24,7 @@ test('saves raw result, escaped report and ordered journal; duplicate IDs remain
   assert.equal(raw.status, 'PASS');
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.readFile(join(result.resultLocation, 'report.xlsx'));
-  assert.deepEqual(workbook.worksheets.map(sheet => sheet.name), ['สรุปผล', 'รายเคส', 'ลำดับการทำงาน']);
+  assert.deepEqual(workbook.worksheets.map(sheet => sheet.name), ['สรุปผล', 'รายเคส', 'ลำดับการทำงาน', 'Journey ราย Step']);
   assert.equal(workbook.getWorksheet('สรุปผล').getCell('B6').value, raw.status);
   assert.equal(workbook.getWorksheet('รายเคส').getCell('A6').value, 2);
   assert.equal(workbook.getWorksheet('รายเคส').getCell('C6').value, 'PASS');

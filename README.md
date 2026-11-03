@@ -72,10 +72,25 @@ Config บันทึกลง `Config/Local/RunConfig.json` ส่วน Devic
 แสดง Test Log และ Appium Log (เฉพาะ Appium ที่เปิดจาก Dashboard) อัปเดตทุก 2 วินาที เก็บข้อความล่าสุดไม่เกิน 200,000 ตัวอักษรต่อช่อง
 ระหว่างรันล็อก Config และปุ่ม Start; เมื่อ Appium เปิดอยู่แล้วใช้ตัวเดิม ไม่ restart
 สถานะอิง /status จริง ไม่ถือว่ากดเปิดแล้วพร้อมทันที
-ผลยังอยู่ใน Results ตามเดิม; รายละเอียดการกดแต่ละปุ่มต้องเพิ่ม Step ภายหลัง
+ผลยังอยู่ใน Results ตามเดิม; Journey ราย Step แสดงตามแผนที่ Script กำหนดไว้ (Login ทั้งสองเคสรองรับแล้ว)
 Control+C ปิด Dashboard และส่ง SIGTERM ให้ process ที่ Dashboard เปิดไว้ จึงควรรอเคสจบก่อนปิด
 
 เลือก Platform แบบ radio แล้วแก้ Device Config ได้ในหน้าเดียวกัน ปุ่มบันทึก Device Config เขียนไฟล์ตาม platform; บันทึกและ Start บันทึก Device Config และ RunConfig ก่อนรัน ขณะสลับแพลตฟอร์มเก็บร่างแต่ละฝั่งไว้จนรีโหลดหน้า
 ใต้ Log มีรายงาน HTML จาก Results เลือกรอบย้อนหลังและดาวน์โหลด Excel/JSON ได้โดยไม่แก้ไฟล์ต้นฉบับ รอบที่ไม่มี result.json ยังไม่แสดงในรายการ
 
 ปุ่ม Appium สลับเป็นปิด Appium เมื่อ Server เปิดอยู่ กดระหว่างเทสได้เพื่อหยุด runner และ process ลูกแล้วปิด Server (รวม Appium ของผู้ใช้เดียวกันบนพอร์ต 4723 ที่เปิดจาก Terminal) Dashboard ยังคงเปิดอยู่ สถานะแสดงหยุดโดยผู้ใช้ การหยุดกลางรอบอาจไม่มีผลสุดท้าย ให้ใช้ Journal ที่บันทึกไว้ ไม่สรุปเป็น PASS และไม่ล้างข้อมูลแอป
+
+หากดับเบิลคลิก StartDashboard.command ขณะ Dashboard เปิดอยู่แล้ว ระบบจะเปิด Browser ไปที่ Dashboard เดิมทันที ไม่เปิด Server ซ้ำและไม่หยุดเทสที่กำลังรัน หากพอร์ตเป็นโปรแกรมอื่นจะแจ้งให้ตรวจพอร์ต
+
+
+ตัวอย่าง Step สำหรับ Script ใหม่:
+```javascript
+export async function exampleCase({ core, journey }) {
+  await journey.run([
+    { id: 'main.wait', name: 'รอหน้า Main', action: () => core.waitForVisible('mainAppPageView') },
+  ]);
+}
+```
+ใช้ Step ID ที่เสถียร ชื่อที่ QA อ่านเข้าใจ และไม่ใส่รหัสผ่าน/OTP ในชื่อ Step
+
+ชื่อ Journey ของ Page/Script ใช้ Localization/localized.mjs ภาษาไทยกลาง เช่น localized.wait(pageId), localized.tap(buttonId) และ localized.expectVisible(pageId) โดย Page ส่ง labels ให้ Script ใช้ร่วมกัน ดู Localization/README.md

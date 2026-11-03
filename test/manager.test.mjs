@@ -151,3 +151,17 @@ test('journal failure stops next case and still closes session', async t => {
   assert.equal(f.calls.at(-1), 'delete');
   assert.ok(!f.calls.includes('case2'));
 });
+
+
+test('manager associates failedStep and Journey history with the correct execution', async t => {
+  const f = await fixture(t);
+  f.registry.set('one', async ({ journey }) => journey.run([
+    { id: 'verify', name: 'ตรวจผล', action: async () => { throw new CoreError('ASSERTION_MISMATCH', 'wrong value'); } },
+    { id: 'next', name: 'ไม่ควรรัน', action: async () => { throw Error('must not execute'); } },
+  ]));
+  const result = await runAutomation(f.options);
+  assert.equal(result.status, 'FAIL');
+  assert.equal(result.cases[0].failedStep, 'verify');
+  assert.deepEqual(result.cases[0].steps.map(step => step.status), ['FAIL', 'SKIPPED']);
+  assert.equal(result.skippedCases.length, 1);
+});

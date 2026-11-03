@@ -1,3 +1,4 @@
+import { localized } from '../../Localization/localized.mjs';
 import { ElementIds } from 'shared-element-ids';
 
 /** Action ของหน้า Main App ใช้ ID จาก contract กลาง */
@@ -15,5 +16,11 @@ export function createMainPage(core) {
     await core.tap(profileButton);
   }
 
-  return { waitUntilReady, tapProfile };
+  const labels = Object.freeze({
+    waitUntilReady: localized.wait(ids.mainAppPageView),
+    tapProfile: localized.tap(ids.mainAppPageLoginButton),
+    expectVisible: localized.expectVisible(ids.mainAppPageView),
+  });
+
+  return { waitUntilReady, tapProfile, labels };
 }
