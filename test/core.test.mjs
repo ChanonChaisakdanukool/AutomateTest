@@ -76,3 +76,29 @@ test('platform value attributes are isolated', async () => {
     const { core } = setup(platform); assert.equal(await core.getValue(await core.findElement('input')), expected);
   }
 });
+
+test('candidate pages share a wait and driver failures are never hidden', async () => {
+  const { core, driver } = setup();
+  assert.equal((await core.waitForAnyVisible(['missing', 'ready'])).targetId, 'ready');
+  await core.waitForEnabled('ready');
+  driver.getElementAttribute = async () => '080-552 4025';
+  await core.expectValue(await core.findElement('phone'), '0805524025', { normalize: value => value.replace(/[\s-]/g, '') });
+  const error = new Error('session lost'); driver.findElements = async () => { throw error; };
+  await assert.rejects(core.waitForAnyVisible(['ready']), actual => actual === error);
+});
+
+test('keyed row IDs survive scrolling and select only the requested item', async () => {
+  const { core, driver, counts } = setup();
+  let scans = 0;
+  driver.findElementsFromElement = async (_, __, value) => {
+    if (value === 'accountCardView__ACC002') return ++scans > 2 ? [raw(value)] : [];
+    return [raw('accountCardView__ACC001')];
+  };
+  const clicked = [];
+  driver.elementClick = async id => clicked.push(id);
+  const card = await core.findByScrolling({ containerId: 'container', targetId: 'accountCardView__ACC002', maxScrolls: 3 });
+  await core.tap(card);
+  assert.equal(scans, 3);
+  assert.equal(counts().scrolls, 2);
+  assert.deepEqual(clicked, ['accountCardView__ACC002']);
+});

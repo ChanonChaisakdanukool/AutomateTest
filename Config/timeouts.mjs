@@ -4,6 +4,8 @@
  * Callers must enforce the deadline; declaring a value alone does not time out work.
  */
 export const TIMEOUTS = Object.freeze({
+  loginEntry: 30_000,
+  loginResult: 60_000,
   findElement: 10_000,
   waitForVisible: 15_000,
   waitForHidden: 15_000,

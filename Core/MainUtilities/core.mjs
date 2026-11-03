@@ -258,6 +258,29 @@ export function createCore({ driver, platform, locators = {}, pollInterval = POL
     );
   }
 
+  /** รอหน้าใดหน้าหนึ่งด้วย deadline เดียว; ตรวจตามลำดับ ID และส่งต่อ driver error */
+  async function waitForAnyVisible(targetIds, { timeout = TIMEOUTS.waitForVisible } = {}) {
+    if (!Array.isArray(targetIds) || !targetIds.length || targetIds.some(id => typeof id !== 'string' || !id)) {
+      throw new TypeError('targetIds must contain non-empty IDs.');
+    }
+    const deadline = createDeadline(timeout);
+    do {
+      for (const targetId of targetIds) {
+        const element = await queryWithinScope(targetId, undefined, deadline);
+        if (element && await checkVisibility(element, deadline)) return { targetId, element };
+      }
+      await deadline.pause();
+    } while (deadline.left() > 0);
+    throw createCoreError('VISIBILITY_TIMEOUT', 'No candidate page became visible', { targetIds });
+  }
+
+  /** รอให้เป้าหมายมองเห็นและพร้อมกด โดยไม่กดซ้ำอัตโนมัติ */
+  async function waitForEnabled(targetId, options = {}) {
+    return waitForCondition(targetId, { timeout: TIMEOUTS.waitForVisible, ...options },
+      async (element, deadline) => element && await checkVisibility(element, deadline) &&
+        await deadline.call(() => driver.isElementEnabled(getElementId(element))), 'VISIBILITY_TIMEOUT');
+  }
+
   /**
    * รอจน element หายหรือไม่มองเห็น โดยไม่เลื่อน
    * @param {string} targetId ID เป้าหมาย
@@ -457,11 +480,11 @@ export function createCore({ driver, platform, locators = {}, pollInterval = POL
    * @param {number} [options.timeout] เวลาสูงสุด (ms) ค่าเริ่มต้นจาก Config/timeouts.mjs
    * @returns {Promise<void>}
    */
-  async function expectValue(element, expected, { timeout = TIMEOUTS.assertion } = {}) {
+  async function expectValue(element, expected, { timeout = TIMEOUTS.assertion, normalize = value => value } = {}) {
     return waitForExpectedValue(
       element,
-      (element, deadline) => deadline.call(() => getAdapter().value(driver, getElementId(element))),
-      expected,
+      async (element, deadline) => normalize(await deadline.call(() => getAdapter().value(driver, getElementId(element)))),
+      normalize(expected),
       timeout,
     );
   }
@@ -512,6 +535,8 @@ export function createCore({ driver, platform, locators = {}, pollInterval = POL
   return {
     findElement,
     waitForVisible,
+    waitForAnyVisible,
+    waitForEnabled,
     waitForHidden,
     findByScrolling,
     tap,
