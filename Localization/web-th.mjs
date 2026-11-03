@@ -1,5 +1,9 @@
 /** ข้อความ UI ของ Dashboard แยกจากชื่อ action ของ Journey */
 export const webLocalized = Object.freeze({
+  "expandLog": "ขยาย",
+  "collapseLog": "ย่อกลับ",
+  "expandTestLog": "ขยาย Test Log",
+  "expandAppiumLog": "ขยาย Appium Log",
   "otp": "OTP",
   "title": "Automation Dashboard",
   "subtitle": "ตั้งค่าชุดทดสอบ เปิด Appium และติดตามการรัน",

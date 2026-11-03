@@ -135,14 +135,15 @@ const server = http.createServer(async (req, res) => {
   if (req.headers.host !== `127.0.0.1:${port}`) return json(403, { error: 'Invalid host' });
   if (req.headers.origin && req.headers.origin !== origin) return json(403, { error: 'Invalid origin' });
   try {
+    if (req.method === 'GET' && req.url === '/api/health') return json(200, { service: 'automation-dashboard', ready: true });
     if (req.method === 'GET' && req.url === '/') {
       const html = await readFile(new URL('./index.html', import.meta.url), 'utf8');
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       const escape = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
       const page = html.replace(/\{\{web\.(\w+)\}\}/g, (_, key) => {
         if (!Object.hasOwn(webLocalized, key)) throw new Error(`Missing web localized key: ${key}`);
         return escape(webLocalized[key]);
       });
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       return res.end(page.replace('__TOKEN__', token).replace('__WEB_LOCALIZED__', JSON.stringify(webLocalized).replace(/</g, '\\u003c')));
     }
     const modules = { '/Shared/additional-data.mjs': '../Shared/additional-data.mjs', '/Dashboard/schema-form.mjs': './schema-form.mjs' };
@@ -245,11 +246,18 @@ const server = http.createServer(async (req, res) => {
 server.on('error', async error => {
   if (error.code === 'EADDRINUSE') {
     try {
-      const response = await fetch(origin, { signal: AbortSignal.timeout(3000) });
-      const html = await response.text();
-      if (!response.ok || !html.includes('<title>Automation Dashboard</title>') || !/const token='[a-f0-9]{64}'/.test(html)) {
-        throw new Error('Port is occupied by another service');
+      let isDashboard = false;
+      try {
+        const health = await fetch(`${origin}/api/health`, { signal: AbortSignal.timeout(3000) });
+        const data = await health.json();
+        isDashboard = health.ok && data.service === 'automation-dashboard' && data.ready === true;
+      } catch { /* Older dashboard versions do not expose health. */ }
+      if (!isDashboard) {
+        const response = await fetch(origin, { signal: AbortSignal.timeout(3000) });
+        const html = await response.text();
+        isDashboard = response.ok && html.includes('id="runLog"') && /const token='[a-f0-9]{64}'/.test(html);
       }
+      if (!isDashboard) throw new Error('Port is occupied by another service');
       console.log(`Dashboard เปิดอยู่แล้ว กำลังเปิดหน้าเว็บ: ${origin}`);
       if (process.platform === 'darwin' && process.env.DASHBOARD_NO_OPEN !== '1') {
         spawn('open', [origin], { stdio: 'ignore' }).on('error', openError => {
