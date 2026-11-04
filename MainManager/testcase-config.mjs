@@ -10,7 +10,7 @@ export function getLoginConfig(config) {
   if (typeof shouldLogin !== 'boolean') {
     throw new TypeError('shouldLogin must be boolean.');
   }
-  for (const key of ['loginMethod', 'phoneNumber', 'email']) {
+  for (const key of ['loginMethod', 'phoneNumber', 'email', 'password', 'otp']) {
     if (Object.hasOwn(config, key)) throw new TypeError(`${key} belongs in LOGIN_OPEN_PROFILE.additionalData, not RunConfig`);
   }
   return { shouldLogin };

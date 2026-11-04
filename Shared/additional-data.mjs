@@ -16,7 +16,7 @@ export function normalizeAdditionalData(schema, data = {}, { validate = true } =
     for (const [key, field] of Object.entries(fields)) {
       if (!matches(field.visibleWhen, output)) { if (Object.hasOwn(value, key)) { delete value[key]; changed = true; } }
       else {
-        if (value[key] === undefined && Object.hasOwn(field, 'default')) { value[key] = structuredClone(field.default); changed = true; }
+        if (value[key] === undefined && Object.hasOwn(field, 'default') && matches(field.defaultWhen, output)) { value[key] = structuredClone(field.default); changed = true; }
         if (field.type === 'object' && object(value[key])) changed = prune(field.fields ?? {}, value[key]) || changed;
       }
     }

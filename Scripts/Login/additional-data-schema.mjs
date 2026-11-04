@@ -1,6 +1,10 @@
 import { webLocalized } from '../../Localization/web-th.mjs';
 
 export const LoginMethod = Object.freeze({ PHONE: 'phone', EMAIL: 'email' });
+const phoneLogin = { field: 'loginMethod', equals: LoginMethod.PHONE };
+const emailLogin = { field: 'loginMethod', equals: LoginMethod.EMAIL };
+const usesOtp = { any: [phoneLogin, emailLogin] };
+
 export const loginAdditionalDataSchema = {
   loginMethod: {
     type: 'enum', label: webLocalized.loginMethod,
@@ -11,19 +15,25 @@ export const loginAdditionalDataSchema = {
   },
   phoneNumber: {
     type: 'string', label: webLocalized.phone,
-    visibleWhen: { field: 'loginMethod', equals: LoginMethod.PHONE },
-    requiredWhen: { field: 'loginMethod', equals: LoginMethod.PHONE },
-  },
-  otp: {
-    type: 'string', label: webLocalized.otp,
-    default: '111111', // Stage whitelist ที่ตกลงใช้สำหรับชุดทดสอบนี้
-    pattern: '^[0-9]{6}$', minLength: 6, maxLength: 6,
-    visibleWhen: { field: 'loginMethod', equals: LoginMethod.PHONE },
-    requiredWhen: { field: 'loginMethod', equals: LoginMethod.PHONE },
+    visibleWhen: phoneLogin,
+    requiredWhen: phoneLogin,
   },
   email: {
     type: 'string', label: webLocalized.email,
-    visibleWhen: { field: 'loginMethod', equals: LoginMethod.EMAIL },
-    requiredWhen: { field: 'loginMethod', equals: LoginMethod.EMAIL },
+    visibleWhen: emailLogin,
+    requiredWhen: emailLogin,
+  },
+  password: {
+    type: 'string', label: webLocalized.password, masked: true, minLength: 6,
+    visibleWhen: emailLogin,
+    requiredWhen: emailLogin,
+  },
+  otp: {
+    type: 'string', label: webLocalized.otp,
+    resetOnChange: 'loginMethod',
+    default: '111111', defaultWhen: phoneLogin, // Stage phone whitelist
+    pattern: '^[0-9]{6}$', minLength: 6, maxLength: 6,
+    visibleWhen: usesOtp,
+    requiredWhen: usesOtp,
   },
 };

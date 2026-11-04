@@ -15,8 +15,9 @@ Browser เรียก validate:false ตอนสลับ enum แล้ว�
 เพิ่มเคสใหม่: สร้าง Script และ Schema แล้วลงทะเบียนทั้งสองใน MainManager/case-registry.mjs; ไม่มีการแก้หน้าเว็บตาม Case ID
 เคสเก่าที่ยังไม่ลงทะเบียน Schema ยังใช้ object additionalData เดิมได้เพื่อความเข้ากันได้
 
-LOGIN_OPEN_PROFILE: loginMethod มี phone/email เท่านั้น ไม่บังคับระบุ ไม่มีค่า none ถ้าไม่เลือกจะไม่บันทึก key และ Script ปัจจุบันยังหยุดหลังยืนยัน Popup
-phone ต้องมี phoneNumber, email ต้องมี email ส่วน shouldLogin เป็นข้อมูลกลางเดิม
+สำหรับ `LOGIN_OPEN_PROFILE` เลือก `loginMethod` เป็น `phone` หรือ `email` หากไม่ระบุวิธี สคริปต์จบหลังยืนยัน Popup
 
-เมื่อเลือก phone จะแสดง otp คู่กับ phoneNumber เป็นข้อมูลรายเคส ค่าเริ่มต้นสำหรับ Stage คือ string "111111" ต้องเป็นตัวเลข 6 หลัก เก็บ 0 นำหน้าได้ เมื่อเลือก email หรือไม่เลือกจะล้าง otp เช่นเดียวกับ phoneNumber
-Schema รองรับ default เฉพาะฟิลด์ที่แสดง และ minLength/maxLength/pattern โดยใช้กติกาเดียวใน Browser/Node ยังไม่ได้เรียกกรอก OTP ใน Script
+- Phone ใช้ `phoneNumber` และ `otp` โดยมีค่า OTP เริ่มต้น `"111111"` สำหรับบัญชี Stage ใน whitelist
+- Email ใช้ `email`, `password` และ `otp` โดยต้องระบุ OTP ทางอีเมลทุกครั้ง
+
+ทั้งสองวิธีใช้ OTP แบบ string 6 หลักเพื่อรักษาเลขศูนย์นำหน้า Dashboard จะล้าง OTP เมื่อเปลี่ยนวิธี Login และเติมค่าเริ่มต้นเมื่อเลือก Phone

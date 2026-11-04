@@ -43,11 +43,22 @@ test('runner preflight validates registered schemas and rejects old global login
 });
 
 
-test('OTP belongs to phone branch, defaults for Stage and retains leading zeroes', () => {
+test('phone OTP defaults for Stage and retains leading zeroes', () => {
   const base = { loginMethod: 'phone', phoneNumber: '0800000000' };
   assert.equal(normalizeAdditionalData(login, base).otp, '111111');
   assert.equal(normalizeAdditionalData(login, { ...base, otp: '012345' }).otp, '012345');
   for (const otp of ['11111', '1111111', 'abcdef', 111111, '']) assert.throws(() => normalizeAdditionalData(login, { ...base, otp }));
-  assert.deepEqual(normalizeAdditionalData(login, { loginMethod: 'email', email: 'test@example.com', phoneNumber: '0800000000', otp: '111111' }), { loginMethod: 'email', email: 'test@example.com' });
   assert.deepEqual(normalizeAdditionalData(login, { otp: '111111' }), {});
+});
+
+test('email requires password and explicit OTP and prunes phone data', () => {
+  const base = { loginMethod: 'email', email: 'qa@example.com' };
+  assert.throws(() => normalizeAdditionalData(login, base), /password is required/);
+  const withPassword = { ...base, password: 'test-password' };
+  assert.throws(() => normalizeAdditionalData(login, withPassword), /otp is required/);
+  assert.throws(() => normalizeAdditionalData(login, { ...withPassword, otp: 123456 }), /otp must be string/);
+  assert.deepEqual(
+    normalizeAdditionalData(login, { ...withPassword, phoneNumber: '0800000000', otp: '012345' }),
+    { ...withPassword, otp: '012345' },
+  );
 });

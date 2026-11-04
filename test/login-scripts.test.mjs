@@ -47,7 +47,7 @@ for (const latest of [false, true]) {
     assert.ok(calls.findIndex(c => c[0] === 'verifyPhone') < calls.findIndex(c => c[0] === 'tap' && c[1] === 'loginPageLoginButton'));
   });
 }
-test('invalid phone data and unsupported email stop before UI actions', async () => {
+test('incomplete phone and email data stop before UI actions', async () => {
   const calls = [];
   for (const additionalData of [{ loginMethod: 'phone' }, { loginMethod: 'email', email: 'qa@example.com' }]) {
     await assert.rejects(caseRegistry.get('LOGIN_OPEN_PROFILE')({ core: mockCore(calls), additionalData }));
@@ -63,3 +63,32 @@ test('OTP dismissal alone cannot pass without Profile', async () => {
   core.waitForVisible = async id => { if (id === 'profilePageView') throw error; return original(id); };
   await assert.rejects(caseRegistry.get('LOGIN_OPEN_PROFILE')({ core, additionalData: { loginMethod: 'phone', phoneNumber: '0805524025' } }), actual => actual === error);
 });
+
+for (const latest of [false, true]) {
+  test(`email login reaches Profile; latest=${latest}`, async () => {
+    const calls = [];
+    const core = mockCore(calls);
+    core.waitForAnyVisible = async () => ({ targetId: latest ? 'latestLoginPageView' : 'loginPagePhoneTextField' });
+    core.waitForEnabled = core.waitForVisible;
+    core.clearText = async element => calls.push(['clear', element.elementId]);
+    core.inputText = async (element, value) => calls.push(['input', element.elementId, value]);
+
+    await caseRegistry.get('LOGIN_OPEN_PROFILE')({
+      core,
+      additionalData: { loginMethod: 'email', email: 'qa@example.com', password: 'test-password', otp: '012345' },
+    });
+
+    assert.deepEqual(calls.filter(([action]) => action === 'tap' || action === 'input').slice(2), [
+      ...(latest ? [['tap', 'latestLoginPageLatestLoginNormalLoginButton']] : []),
+      ['tap', 'loginPageEmailButton'],
+      ['tap', 'loginEmailPageEmailTextField'],
+      ['input', 'loginEmailPageEmailTextField', 'qa@example.com'],
+      ['tap', 'loginEmailPagePasswordTextField'],
+      ['input', 'loginEmailPagePasswordTextField', 'test-password'],
+      ['tap', 'loginEmailPageLoginButton'],
+      ['tap', 'loginEmailOtpPageOtpTextField'],
+      ['input', 'loginEmailOtpPageOtpTextField', '012345'],
+    ]);
+    assert.deepEqual(calls.at(-1), ['expectVisible', 'profilePageView']);
+  });
+}

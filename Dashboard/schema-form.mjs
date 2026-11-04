@@ -28,12 +28,16 @@ export function renderSchemaForm(container, schema, data, onChange, labels) {
         const index = options.findIndex(option => Object.is(option.value, value[key])); input.value = index < 0 ? '' : String(index);
         input.onchange = () => {
           if (input.value === '') delete value[key]; else value[key] = options[Number(input.value)].value;
+          for (const [dependentKey, dependent] of Object.entries(definitions)) {
+            if (dependent.resetOnChange === key) delete value[dependentKey];
+          }
           // Materialize ancestors before normalization and redraw.
           input.dispatchEvent(new Event('input', { bubbles: true }));
           onChange(normalizeAdditionalData(schema, data, { validate: false }));
         };
       } else {
-        input.type = field.type === 'number' ? 'number' : 'text'; if (field.type === 'number') input.step = 'any';
+        input.type = field.masked ? 'password' : field.type === 'number' ? 'number' : 'text';
+        if (field.type === 'number') input.step = 'any';
         input.value = value[key] ?? '';
         if (field.minLength !== undefined) input.minLength = field.minLength;
         if (field.maxLength !== undefined) input.maxLength = field.maxLength;

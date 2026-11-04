@@ -18,7 +18,7 @@ RunConfig เก็บ runName, shouldContinueNextCaseWhenFail, platform, should
 
 เส้นทางไฟล์เคสอ้างจากโฟลเดอร์ RunConfig โหลดทุกไฟล์และตรวจ Registry ก่อนเปิด session แต่ละไฟล์มี case เดียว additionalData เป็น optional สำหรับข้อมูลเฉพาะเคส ไม่ต้องใส่เมื่อไม่มีข้อมูล
 
-- LOGIN_OPEN_PROFILE: รอ Main → กด Profile → รอ Popup → Confirm → รอ Popup หาย ยังไม่ยืนยันหน้าปลายทางหรือ Login สำเร็จ
+- LOGIN_OPEN_PROFILE รอ Main → กด Profile → ยืนยัน Popup แล้วทำ Login ตาม `additionalData.loginMethod` หากระบุวิธี จะตรวจว่าเปิดหน้า Profile หลังกรอก OTP
 - LOGIN_OPEN_PROFILE_CANCEL: รอ Main → กด Profile → Cancel → รอ Popup หาย → ตรวจ Main visible
 
 ทั้งสองเป็น Script ใน Scripts/Login ใช้ Pages ร่วมกัน ไม่มี Reuse Login และไม่รับ popupSelection/popupAction จาก Config shouldLogin ไม่ใช้ข้ามสองเคสนี้ loginConfig ส่งเฉพาะ shouldLogin ส่วนวิธี Login และข้อมูลติดต่ออยู่ใน additionalData ของ LOGIN_OPEN_PROFILE
@@ -98,8 +98,19 @@ export async function exampleCase({ core, journey }) {
 
 ## AdditionalData แบบ Schema
 
-loginMethod / phoneNumber / email ย้ายมาอยู่ใน additionalData ของ LOGIN_OPEN_PROFILE แล้ว ไม่รับที่ RunConfig ระดับบน ส่วน shouldLogin ยังคงเดิม
+กำหนดข้อมูล Login รายเคสใน `LOGIN_OPEN_PROFILE.additionalData` ส่วน `shouldLogin` อยู่ใน RunConfig
 ไฟล์ Schema: Scripts/Login/additional-data-schema.mjs; กลไก Renderer/Validator ร่วม: Shared/additional-data.mjs และ Dashboard/schema-form.mjs
 เลือกวิธี Login ในแต่ละแถว phone/email แล้วกรอกช่องที่เกี่ยวข้อง หากไม่เลือกจะไม่บันทึก loginMethod ไม่มีค่า none
 รองรับ enum ตามเงื่อนไขซ้อนและ object แบบ recursive อ่านรายละเอียด Shared/README.md
-Script Login ยังทำงานถึงยืนยัน Popup ตามเดิม รอบนี้เพิ่มการตั้งค่าและตรวจข้อมูล การกรอกเบอร์/อีเมล/OTP จะต่อในขั้นถัดไป
+ถ้าไม่ระบุวิธี สคริปต์จบหลังยืนยัน Popup เมื่อเลือก Phone หรือ Email แล้วเจอ Latest Login สคริปต์จะกดเข้าสู่ระบบด้วยบัญชีอื่นเสมอ
+
+Email ต้องระบุ `email`, `password` และ `otp` ใน `additionalData` โดยใช้รหัส OTP ทางอีเมลแบบ string 6 หลัก ค่า OTP เริ่มต้นของ Phone ใช้กับบัญชี Stage ที่อยู่ใน whitelist
+
+```json
+{
+  "loginMethod": "email",
+  "email": "qa@example.com",
+  "password": "REPLACE_WITH_TEST_PASSWORD",
+  "otp": "012345"
+}
+```

@@ -4,6 +4,7 @@ export const webLocalized = Object.freeze({
   "collapseLog": "ย่อกลับ",
   "expandTestLog": "ขยาย Test Log",
   "expandAppiumLog": "ขยาย Appium Log",
+  "password": "รหัสผ่าน",
   "otp": "OTP",
   "title": "Automation Dashboard",
   "subtitle": "ตั้งค่าชุดทดสอบ เปิด Appium และติดตามการรัน",
