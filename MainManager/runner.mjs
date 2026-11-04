@@ -156,9 +156,9 @@ export async function runAutomation({
 
       if (result.status === 'ERROR') {
         summary.status = 'ERROR';
-        break;
+        if (result.error?.code === 'COMMAND_TIMEOUT') break;
       }
-      if (result.status === 'FAIL') {
+      if (result.status === 'FAIL' && summary.status !== 'ERROR') {
         summary.status = 'FAIL';
       }
 
@@ -168,7 +168,7 @@ export async function runAutomation({
       await driver.switchContext('NATIVE_APP');
       core = coreFactory({ driver, platform: deviceConfig.platform, locators: elementLocators });
 
-      if (result.status === 'FAIL' && !testConfig.shouldContinueNextCaseWhenFail) {
+      if (['FAIL', 'ERROR'].includes(result.status) && !testConfig.shouldContinueNextCaseWhenFail) {
         break;
       }
     }

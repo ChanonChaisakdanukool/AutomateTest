@@ -5,18 +5,29 @@ select{appearance:none;padding-right:44px;background-image:url("data:image/svg+x
 .additional .schema-field{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin:16px 0;max-width:520px}.additional .schema-field>input,.additional .schema-field>select{margin-top:0;max-width:100%;width:100%}.additional .schema-field-child{margin-left:24px;padding:14px 16px;border-left:3px solid #d6e2ed;background:#f7f9fc;border-radius:0 8px 8px 0}.schema-group{border:1px solid #dbe3ea;border-radius:8px;padding:12px 16px;margin-top:16px}@media(max-width:700px){.additional .schema-field-child{margin-left:12px;padding:12px}}
 
 .log-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.log-panel{min-width:0}.log-header{display:flex;align-items:center;justify-content:space-between;gap:12px}.log-header h2{margin:0}.log-panel pre,#expandedLogBody pre{white-space:pre;overflow:auto;max-width:100%;tab-size:2}.log-panel pre{resize:vertical;min-height:180px}.log-dialog{width:94vw;max-width:none;height:90vh;max-height:90vh;padding:24px;border:1px solid #dae1e8;border-radius:12px;color:#243746}.log-dialog::backdrop{background:rgb(15 25 35 / .6)}.log-dialog[open]{display:flex;flex-direction:column;gap:16px}#expandedLogBody{flex:1;min-height:0}#expandedLogBody pre{height:100%;margin:0}body:has(.log-dialog[open]){overflow:hidden}@media(max-width:700px){.log-grid{grid-template-columns:1fr}.log-dialog{padding:16px}}
-</style><main><h1>{{web.title}}</h1><p class="subtitle">{{web.subtitle}}</p>
-<section><div class="grid"><div><h2>{{web.appiumTitle}}</h2><div class="toolbar"><span id="appiumStatus" class="badge">{{web.checking}}</span><button id="appiumStart">{{web.openAppium}}</button></div><p><small>{{web.appiumHint}}</small></p></div><div><h2>{{web.testTitle}}</h2><div class="toolbar"><span id="runStatus" class="badge">{{web.idle}}</span><button id="start" disabled>{{web.start}}</button></div><p><small>{{web.deviceHint}}</small></p></div></div></section>
-<section><h2>{{web.runConfig}}</h2><fieldset id="fields" style="border:0;padding:0;margin:0"><div class="grid"><label>{{web.runName}}<input id="runName" placeholder="LoginOpenProfile"></label><div><label>{{web.platform}}</label><div class="toolbar"><label><input type="radio" name="platform" value="iOS"> iOS</label><label><input type="radio" name="platform" value="Android"> Android</label></div></div></div><p><label><input type="checkbox" id="continueOnFail"> {{web.continueOnFail}}</label></p>
+.platform-options{min-height:44px;margin-top:6px}.platform-options input{margin-top:0}
+html[data-theme=dark]{color-scheme:dark}
+html[data-theme=dark] body{background:#101114;color:#e5e7eb}
+html[data-theme=dark] section,html[data-theme=dark] .log-dialog{background:#1b1d22;color:#e5e7eb;border-color:#3b414a}
+html[data-theme=dark] input,html[data-theme=dark] select,html[data-theme=dark] textarea{background-color:#252830;color:#e5e7eb;border-color:#535c69}
+html[data-theme=dark] .secondary,html[data-theme=dark] .badge{background:#303743;color:#e5e7eb}
+html[data-theme=dark] small,html[data-theme=dark] .subtitle{color:#b3bdca}
+html[data-theme=dark] #notice{color:#9ccfff}
+html[data-theme=dark] .additional .schema-field-child,html[data-theme=dark] .drop-target{background:#252d37}
+html[data-theme=dark] .case-card,html[data-theme=dark] .schema-group{border-color:#414954}
+.case-selection{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}.case-selection #caseSearchStatus{grid-column:1/-1}.case-combo{position:relative;min-width:0}#casePicker{position:absolute;top:100%;left:0;right:0;z-index:10;max-height:260px;overflow:auto;background:white;border:1px solid #bcc9d5;border-radius:6px;box-shadow:0 6px 18px #0002}#casePicker button{display:block;width:100%;text-align:left;background:transparent;color:inherit;border-radius:0;overflow-wrap:anywhere}#casePicker button:hover,#casePicker button:focus{background:#e8eef4}html[data-theme=dark] #casePicker{background:#252830;color:#e5e7eb}html[data-theme=dark] #casePicker button:hover,html[data-theme=dark] #casePicker button:focus{background:#394353}
+</style><main><button id="themeToggle" class="secondary" style="float:right" type="button">ธีมมืด</button><h1>{{web.title}}</h1><p class="subtitle">{{web.subtitle}}</p>
+<section><div class="grid"><div><h2>{{web.appiumTitle}}</h2><div class="toolbar"><span id="appiumStatus" class="badge">{{web.checking}}</span><button id="appiumStart">{{web.openAppium}}</button></div></div><div><h2>{{web.testTitle}}</h2><div class="toolbar"><span id="runStatus" class="badge">{{web.idle}}</span><button id="start" disabled>{{web.start}}</button></div></div></div></section>
+<section><h2>{{web.runConfig}}</h2><fieldset id="fields" style="border:0;padding:0;margin:0"><div class="grid"><label>{{web.runName}}<input id="runName" placeholder="LoginOpenProfile"></label><div><label>{{web.platform}}</label><div class="toolbar platform-options"><label><input type="radio" name="platform" value="iOS"> iOS</label><label><input type="radio" name="platform" value="Android"> Android</label></div></div></div><p><label><input type="checkbox" id="continueOnFail"> {{web.continueOnFail}}</label></p>
 <div id="devicePanel" class="case-card"><h3>{{web.deviceConfig}} <span id="devicePlatform"></span></h3><fieldset id="deviceFields" style="border:0;padding:0" disabled><div class="grid">
 <label>{{web.profileName}}<input id="profileName"></label><label>{{web.deviceType}}<select id="deviceType"></select></label>
 <label>{{web.deviceId}}<input id="deviceId"></label><label>{{web.appSource}}<select id="appSource"><option value="installed">{{web.installed}}</option><option value="file">{{web.file}}</option></select></label>
 <label id="appPathLabel">{{web.buildPath}}<input id="appPath"></label><label><span id="identityLabel">{{web.bundleId}}</span><input id="appIdentity"></label>
 <label id="activityLabel">{{web.appActivity}}<input id="appActivity"></label></div>
-<p><button id="saveDevice" class="secondary">{{web.saveDevice}}</button></p></fieldset></div>
-<p><label><input id="shouldLogin" type="checkbox"> shouldLogin</label></p>
-<h3>{{web.caseOrder}}</h3><div class="toolbar"><select id="casePicker" style="width:auto;max-width:100%"></select><button id="add" class="secondary">{{web.addCase}}</button></div><div id="cases"></div>
-<p><button id="save">{{web.saveConfig}}</button></p></fieldset><div id="notice" role="status" aria-live="polite"></div></section>
+</fieldset></div>
+
+<h3>{{web.caseOrder}}</h3><div class="case-selection"><div class="case-combo"><input id="caseSearch" type="search" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="casePicker" placeholder="ค้นหาและเลือก Test Case" aria-label="ค้นหาและเลือก Test Case" autocomplete="off"><div id="casePicker" role="listbox" hidden></div></div><button id="add" class="secondary" disabled>{{web.addCase}}</button><small id="caseSearchStatus" role="status" aria-live="polite"></small></div><div id="cases"></div>
+</fieldset><div id="notice" role="status" aria-live="polite"></div></section>
 <div class="grid log-grid"><section class="log-panel"><div class="log-header"><h2 id="runLogTitle">{{web.testLog}}</h2><button type="button" class="secondary" data-expand-log="runLog" aria-haspopup="dialog" aria-label="{{web.expandTestLog}}">{{web.expandLog}}</button></div><pre id="runLog">{{web.emptyLog}}</pre></section><section class="log-panel"><div class="log-header"><h2 id="appiumLogTitle">{{web.appiumLog}}</h2><button type="button" class="secondary" data-expand-log="appiumLog" aria-haspopup="dialog" aria-label="{{web.expandAppiumLog}}">{{web.expandLog}}</button></div><pre id="appiumLog">{{web.appiumLogHint}}</pre></section></div>
 <dialog id="logDialog" class="log-dialog" aria-labelledby="expandedLogTitle"><div class="log-header"><h2 id="expandedLogTitle"></h2><button type="button" id="closeLog" class="secondary">{{web.collapseLog}}</button></div><div id="expandedLogBody"></div></dialog><section><h2>{{web.resultsTitle}}</h2><div class="toolbar"><select id="resultPicker" style="max-width:100%;width:auto" aria-label="{{web.chooseRun}}"></select><button id="refreshResults" class="secondary">{{web.refreshResults}}</button><button id="downloadExcel" class="secondary">{{web.downloadExcel}}</button><button id="downloadJson" class="secondary">{{web.downloadJson}}</button></div><p id="resultMessage"></p><iframe id="reportFrame" title="{{web.reportTitle}}" sandbox="" style="width:100%;height:720px;border:1px solid #dae1e8;border-radius:8px" hidden></iframe></section></main>
 <script type="module">
@@ -25,6 +36,16 @@ import { normalizeAdditionalData } from "/Shared/additional-data.mjs";
 const webLocalized=__WEB_LOCALIZED__;
 const token='__TOKEN__';const $=id=>document.getElementById(id);let config={},catalog=[],schemas={},loaded=false,pending=false,ready=false,running=false,appiumState="offline",dragIndex=null;
 let connected=false,polling=false;
+function setTheme(dark){
+ document.documentElement.dataset.theme=dark?'dark':'light';
+ $('themeToggle').textContent=dark?'ธีมสว่าง':'ธีมมืด';
+ $('themeToggle').setAttribute('aria-pressed',String(dark));
+}
+setTheme(localStorage.getItem('theme')==='dark');
+$('themeToggle').onclick=()=>{
+ const dark=document.documentElement.dataset.theme!=='dark';
+ setTheme(dark);localStorage.setItem('theme',dark?'dark':'light');
+};
 // Move the existing log node so polling, selection and scroll continue while expanded.
 let expandedLog=null;
 const logDialog=$('logDialog');
@@ -52,7 +73,7 @@ async function api(path,method='GET',data){
 }
 function notice(text){$('notice').textContent=text;}
 function controls(){ $('start').disabled=!loaded||pending||running||!ready||!connected||deviceLoading||!devicePlatform;$('fields').disabled=!loaded||pending||running;$('appiumStart').disabled=!connected||pending||appiumState==='stopping';$('appiumStart').textContent=appiumState==='stopping'?webLocalized.stoppingButton:(appiumState!=='offline'||running)?webLocalized.closeAppium:webLocalized.openAppium;$('deviceFields').disabled=deviceLoading||!devicePlatform||pending||running; }
-function collect(){const next={...config,platform:platformValue(),shouldContinueNextCaseWhenFail:$('continueOnFail').checked,shouldLogin:$('shouldLogin').checked};for(const key of ['runName']){const value=$(key).value.trim();if(value)next[key]=value;else delete next[key];}return next;}
+function collect(){const next={...config,platform:platformValue(),shouldContinueNextCaseWhenFail:$('continueOnFail').checked};for(const key of ['runName']){const value=$(key).value.trim();if(value)next[key]=value;else delete next[key];}return next;}
 function move(from,to){if(running||pending||from===to)return;config=collect();const [entry]=config.testCases.splice(from,1);config.testCases.splice(to,0,entry);draw();}
 function additionalFields(value,parent,key,labelText){
  const wrap=document.createElement('div');
@@ -72,7 +93,7 @@ function additionalFields(value,parent,key,labelText){
 function draw(){
  for(const key of ['runName'])$(key).value=config[key]??'';
  document.querySelectorAll('input[name=platform]').forEach(input=>input.checked=input.value===config.platform);
- $('shouldLogin').checked=config.shouldLogin??true;$('continueOnFail').checked=!!config.shouldContinueNextCaseWhenFail;
+ $('continueOnFail').checked=config.shouldContinueNextCaseWhenFail??true;
  const list=$('cases');list.replaceChildren();
  (config.testCases??[]).forEach((entry,index)=>{
   const row=document.createElement('div');row.className='case-card';row.dataset.index=index;
@@ -98,21 +119,68 @@ function draw(){
 }
 async function action(fn){if(pending)return;pending=true;controls();try{await fn();}catch(error){notice(error.message);}finally{pending=false;controls();}}
 async function save(){for(const input of $('fields').querySelectorAll('input,select'))if(!input.reportValidity())throw Error(webLocalized.checkFields);config=collect();const result=await api('config','POST',config);draw();notice(result.message);}
-$('save').onclick=()=>action(save);$('start').onclick=()=>action(async()=>{await saveDevice();await save();notice((await api('run/start','POST',{})).message);running=true;await poll();});$('appiumStart').onclick=()=>action(async()=>{notice((await api((appiumState!=='offline'||running)?'appium/stop':'appium/start','POST',{})).message);await poll();});
-$('add').onclick=()=>{config=collect();const source=catalog[Number($('casePicker').value)];if(!source)return;config.testCases.push(structuredClone(source.entry));draw();};
+$('start').onclick=()=>action(async()=>{await saveDevice();await save();notice((await api('run/start','POST',{})).message);running=true;await poll();});$('appiumStart').onclick=()=>action(async()=>{notice((await api((appiumState!=='offline'||running)?'appium/stop':'appium/start','POST',{})).message);await poll();});
+$('add').onclick=()=>{config=collect();const source=catalog[selectedCaseIndex];if(!source)return;config.testCases.push(structuredClone(source.entry));draw();};
+let selectedCaseIndex=null;
+function closeCasePicker(){
+ $('casePicker').hidden=true;
+ $('caseSearch').setAttribute('aria-expanded','false');
+}
+function filterCases(show=false){
+ const query=$('caseSearch').value.trim().toLowerCase();
+ const list=$('casePicker');
+ list.replaceChildren();
+ catalog.forEach((item,index)=>{
+  if(![item.name,item.entry.case.id].join(' ').toLowerCase().includes(query))return;
+  const option=document.createElement('button');
+  option.type='button';option.role='option';option.textContent=item.name;
+  option.setAttribute('aria-selected',String(index===selectedCaseIndex));
+  option.onclick=()=>{
+   selectedCaseIndex=index;
+   $('caseSearch').value=item.name;
+   $('add').disabled=false;
+   closeCasePicker();
+   $('caseSearch').focus();
+   closeCasePicker();
+   $('caseSearchStatus').textContent='เลือก '+item.name;
+  };
+  option.onkeydown=event=>{
+   if(event.key==='ArrowDown'){event.preventDefault();option.nextElementSibling?.focus();}
+   if(event.key==='ArrowUp'){event.preventDefault();if(option.previousElementSibling)option.previousElementSibling.focus();else $('caseSearch').focus();}
+   if(event.key==='Escape'){event.preventDefault();$('caseSearch').focus();closeCasePicker();}
+  };
+  list.append(option);
+ });
+ const count=list.children.length;
+ list.hidden=!show||count===0;
+ $('caseSearch').setAttribute('aria-expanded',String(!list.hidden));
+ $('add').disabled=selectedCaseIndex===null;
+ $('caseSearchStatus').textContent=count ? `พบ ${count} เคส — เลือกเคสแล้วกดเพิ่มเคส` : 'ไม่พบ Test Case ที่ตรงกับคำค้น';
+}
+$('caseSearch').oninput=()=>{selectedCaseIndex=null;filterCases(true);};
+$('caseSearch').onfocus=()=>filterCases(true);
+$('caseSearch').onclick=()=>filterCases(true);
+$('caseSearch').onkeydown=event=>{
+ if(event.key==='ArrowDown'){event.preventDefault();filterCases(true);$('casePicker').firstElementChild?.focus();}
+ if(event.key==='Escape')closeCasePicker();
+};
+document.addEventListener('click',event=>{if(!event.target.closest('.case-combo'))closeCasePicker();});
+document.querySelector('.case-combo').addEventListener('focusout',event=>{
+ if(!event.currentTarget.contains(event.relatedTarget))closeCasePicker();
+});
 function collectDevice(){if(!devicePlatform)return;const prior=deviceDrafts[devicePlatform];const app={...prior.app,source:$('appSource').value};const identity=devicePlatform==='iOS'?'bundleId':'appPackage';app[identity]=$('appIdentity').value.trim();if(app.source==='file')app.path=$('appPath').value.trim();else delete app.path;if(devicePlatform==='Android'&&$('appActivity').value.trim())app.appActivity=$('appActivity').value.trim();else delete app.appActivity;deviceDrafts[devicePlatform]={...prior,profileName:$('profileName').value.trim(),device:{...prior.device,type:$('deviceType').value,id:$('deviceId').value.trim()},app};}
 function deviceVisibility(){$('appPathLabel').hidden=$('appSource').value!=='file';$('activityLabel').hidden=devicePlatform!=='Android';}
 async function loadDevice(platform){collectDevice();const version=++deviceRequest;deviceLoading=true;devicePlatform=null;controls();try{const data=deviceDrafts[platform]??(await api('device?platform='+encodeURIComponent(platform))).config;if(version!==deviceRequest)return;deviceDrafts[platform]=data;devicePlatform=platform;$('devicePlatform').textContent=platform;$('deviceType').replaceChildren();for(const type of [platform==='iOS'?'simulator':'emulator','real']){const option=document.createElement('option');option.value=type;option.textContent=type;$('deviceType').append(option);}$('profileName').value=data.profileName??'';$('deviceType').value=data.device?.type??'';$('deviceId').value=data.device?.id??'';$('appSource').value=data.app?.source??'installed';$('appPath').value=data.app?.path??'';$('appIdentity').value=data.app?.[platform==='iOS'?'bundleId':'appPackage']??'';$('appActivity').value=data.app?.appActivity??'';$('identityLabel').textContent=platform==='iOS'?webLocalized.bundleId:'App Package';deviceVisibility();}catch(error){notice(error.message);}finally{if(version===deviceRequest){deviceLoading=false;controls();}}}
 async function saveDevice(){if(deviceLoading||!devicePlatform)throw Error(webLocalized.deviceLoading);collectDevice();notice((await api('device','POST',deviceDrafts[devicePlatform])).message);}
-$('saveDevice').onclick=()=>action(saveDevice);$('appSource').onchange=deviceVisibility;
+$('appSource').onchange=deviceVisibility;
 document.querySelectorAll('input[name=platform]').forEach(input=>input.onchange=()=>{config=collect();loadDevice(input.value);});
 async function resultBlob(file){const run=$('resultPicker').value;if(!run)throw Error(webLocalized.noResults);const response=await fetch('/api/results/file?run='+encodeURIComponent(run)+'&file='+encodeURIComponent(file),{headers:{'X-Dashboard-Token':token}});if(!response.ok)throw Error(webLocalized.missingFile+file+webLocalized.inRun);return response.blob();}
 let reportRequest=0;
 async function showResult(){const version=++reportRequest;$('reportFrame').hidden=true;try{const blob=await resultBlob('report.html');const text=await blob.text();if(version!==reportRequest)return;const doc=new DOMParser().parseFromString(text,'text/html');doc.querySelectorAll('a').forEach(a=>a.remove());$('reportFrame').srcdoc=doc.documentElement.outerHTML;$('reportFrame').hidden=false;$('resultMessage').textContent=webLocalized.reportFromResults;}catch(error){if(version===reportRequest)$('resultMessage').textContent=error.message;}}
-async function refreshResults(){try{const data=await api('results');const signature=JSON.stringify(data.results);if(signature===resultSignature)return;resultSignature=signature;const previous=$('resultPicker').value;$('resultPicker').replaceChildren();for(const result of data.results){const option=document.createElement('option');option.value=result.folder;option.textContent=result.folder+' — '+result.status;$('resultPicker').append(option);}if(data.results.some(item=>item.folder===previous))$('resultPicker').value=previous;await showResult();}catch(error){$('resultMessage').textContent=error.message;}}
+async function refreshResults({selectLatest=false}={}){try{const data=await api('results');const signature=JSON.stringify(data.results);if(signature===resultSignature&&!selectLatest)return;resultSignature=signature;const previous=$('resultPicker').value;$('resultPicker').replaceChildren();for(const result of data.results){const option=document.createElement('option');option.value=result.folder;option.textContent=result.folder+' — '+result.status;$('resultPicker').append(option);}if(!selectLatest&&data.results.some(item=>item.folder===previous))$('resultPicker').value=previous;await showResult();}catch(error){$('resultMessage').textContent=error.message;}}
 $('resultPicker').onchange=showResult;$('refreshResults').onclick=()=>{resultSignature='';refreshResults();};
 for(const [id,file]of [['downloadExcel','report.xlsx'],['downloadJson','result.json']])$(id).onclick=async()=>{try{const url=URL.createObjectURL(await resultBlob(file));const link=document.createElement('a');link.href=url;link.download=$('resultPicker').value+'_'+file;link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}catch(error){$('resultMessage').textContent=error.message;}};
-async function poll(){if(polling)return;polling=true;try{const data=await api('status');connected=true;appiumState=data.appium;ready=data.appium==='ready';const wasRunning=running;running=data.run.status==='running';if(wasRunning&&!running)refreshResults();$('appiumStatus').textContent=({ready:webLocalized.ready,offline:webLocalized.offline,starting:webLocalized.starting,unavailable:webLocalized.unavailable,stopping:webLocalized.stopping})[data.appium];$('appiumStatus').className='badge '+data.appium;$('runStatus').textContent=({idle:webLocalized.idle,running:webLocalized.running,STOPPED:webLocalized.stopped})[data.run.status]??data.run.status;$('runStatus').className='badge '+data.run.status;for(const kind of ['run','appium']){const el=$(kind+'Log');if(data.logs[kind]&&el.textContent!==data.logs[kind]){const bottom=el.scrollTop+el.clientHeight>=el.scrollHeight-30;el.textContent=data.logs[kind];if(bottom)el.scrollTop=el.scrollHeight;}}}catch(error){connected=false;ready=false;$('appiumStatus').textContent=webLocalized.disconnected;$('appiumStatus').className='badge ERROR';notice(webLocalized.reconnect+error.message+')');}finally{polling=false;controls();}}
+async function poll(){if(polling)return;polling=true;try{const data=await api('status');connected=true;appiumState=data.appium;ready=data.appium==='ready';const wasRunning=running;running=data.run.status==='running';if(wasRunning&&!running)refreshResults({selectLatest:true});$('appiumStatus').textContent=({ready:webLocalized.ready,offline:webLocalized.offline,starting:webLocalized.starting,unavailable:webLocalized.unavailable,stopping:webLocalized.stopping})[data.appium];$('appiumStatus').className='badge '+data.appium;$('runStatus').textContent=({idle:webLocalized.idle,running:webLocalized.running,STOPPED:webLocalized.stopped})[data.run.status]??data.run.status;$('runStatus').className='badge '+data.run.status;for(const kind of ['run','appium']){const el=$(kind+'Log');if(data.logs[kind]&&el.textContent!==data.logs[kind]){const bottom=el.scrollTop+el.clientHeight>=el.scrollHeight-30;el.textContent=data.logs[kind];if(bottom)el.scrollTop=el.scrollHeight;}}}catch(error){connected=false;ready=false;$('appiumStatus').textContent=webLocalized.disconnected;$('appiumStatus').className='badge ERROR';notice(webLocalized.reconnect+error.message+')');}finally{polling=false;controls();}}
 poll();setInterval(poll,2000);
-(async()=>{try{const data=await api('config');config=data.config;catalog=data.cases;schemas=data.schemas??{};catalog.forEach((item,index)=>{const option=document.createElement('option');option.value=String(index);option.textContent=item.name;$('casePicker').append(option);});$('add').disabled=!catalog.length;draw();loaded=true;await loadDevice(config.platform);await refreshResults();}catch(error){notice(error.message);}controls();})();
+(async()=>{try{const data=await api('config');config={...data.config,runName:'',shouldContinueNextCaseWhenFail:true};catalog=data.cases;schemas=data.schemas??{};filterCases();draw();loaded=true;await loadDevice(config.platform);await refreshResults();}catch(error){notice(error.message);}controls();})();
 </script></html>

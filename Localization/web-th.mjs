@@ -19,7 +19,7 @@ export const webLocalized = Object.freeze({
   "runConfig": "Run Config",
   "runName": "Run Name",
   "platform": "Platform",
-  "continueOnFail": "รันเคสถัดไปเมื่อ FAIL",
+  "continueOnFail": "ทดสอบ Test case ถัดไปเมื่อ Fail หรือ Error",
   "deviceConfig": "Device Config",
   "profileName": "ชื่อ Profile",
   "deviceType": "ประเภทอุปกรณ์",

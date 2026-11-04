@@ -55,12 +55,12 @@ test('FAIL stops or continues according to config', async t => {
     assert.equal(f.calls.at(-1), 'delete');
   }
 });
-test('system ERROR stops even when continuation is enabled', async t => {
+test('system ERROR continues when continuation is enabled', async t => {
   const f = await fixture(t, { continueOnFail: true });
   f.registry.set('one', async () => { throw new Error('session lost'); });
   const result = await runAutomation(f.options);
-  assert.equal(result.status, 'ERROR'); assert.equal(result.cases.length, 1);
-  assert.ok(!f.calls.includes('terminate')); assert.equal(f.calls.at(-1), 'delete');
+  assert.equal(result.status, 'ERROR'); assert.equal(result.cases.length, 2);
+  assert.ok(f.calls.includes('terminate')); assert.equal(f.calls.at(-1), 'delete');
 });
 test('cleanup failure preserves original case failure', async t => {
   const f = await fixture(t);
