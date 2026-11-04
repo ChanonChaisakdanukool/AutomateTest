@@ -17,20 +17,27 @@ html[data-theme=dark] .additional .schema-field-child,html[data-theme=dark] .dro
 html[data-theme=dark] .case-card,html[data-theme=dark] .schema-group{border-color:#414954}
 .case-selection{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}.case-selection #caseSearchStatus{grid-column:1/-1}.case-combo{position:relative;min-width:0}#casePicker{position:absolute;top:100%;left:0;right:0;z-index:10;max-height:260px;overflow:auto;background:white;border:1px solid #bcc9d5;border-radius:6px;box-shadow:0 6px 18px #0002}#casePicker button{display:block;width:100%;text-align:left;background:transparent;color:inherit;border-radius:0;overflow-wrap:anywhere}#casePicker button:hover,#casePicker button:focus{background:#e8eef4}html[data-theme=dark] #casePicker{background:#252830;color:#e5e7eb}html[data-theme=dark] #casePicker button:hover,html[data-theme=dark] #casePicker button:focus{background:#394353}
 #videoDialog{width:min(900px,94vw);border:1px solid #bcc9d5;border-radius:12px;padding:20px}#videoDialog::backdrop{background:#000a}#resultChoices{position:absolute;z-index:20;left:0;right:0;max-height:280px;overflow:auto;background:Canvas;color:CanvasText;border:1px solid #bcc9d5;border-radius:6px}#resultChoices button{display:block;width:100%;text-align:left;background:transparent;color:inherit;overflow-wrap:anywhere}#resultChoices button:hover,#resultChoices button:focus{background:#215b82;color:white}
-</style><main><button id="themeToggle" class="secondary" style="float:right" type="button">ธีมมืด</button><h1>{{web.title}}</h1><p class="subtitle">{{web.subtitle}}</p>
-<section><div class="grid"><div><h2>{{web.appiumTitle}}</h2><div class="toolbar"><span id="appiumStatus" class="badge">{{web.checking}}</span><button id="appiumStart">{{web.openAppium}}</button></div></div><div><h2>{{web.testTitle}}</h2><div class="toolbar"><span id="runStatus" class="badge">{{web.idle}}</span><button id="start" disabled>{{web.start}}</button></div></div></div></section>
-<section><h2>{{web.runConfig}}</h2><fieldset id="fields" style="border:0;padding:0;margin:0"><div class="grid"><label>{{web.runName}}<input id="runName"></label><div><label>{{web.platform}}</label><div class="toolbar platform-options"><label><input type="radio" name="platform" value="iOS"> iOS</label><label><input type="radio" name="platform" value="Android"> Android</label></div></div></div><p><label><input type="checkbox" id="continueOnFail"> {{web.continueOnFail}}</label></p>
-<div id="devicePanel" class="case-card"><h3>{{web.deviceConfig}} <span id="devicePlatform"></span></h3><fieldset id="deviceFields" style="border:0;padding:0" disabled><div class="grid">
+
+:root{--surface:#fff;--border:#dce1e7;--text:#242b35;--muted:#687484;--soft:#f6f8fa}
+html[data-theme=dark]{--surface:#1b1e24;--border:#363d48;--text:#e1e6ef;--muted:#a9b4c4;--soft:#222730}
+body{font-size:14px;line-height:1.55;color:var(--text)}main{max-width:1280px;margin:24px auto}h1{font-size:24px;letter-spacing:-.5px}h2{font-size:17px}h3{font-size:15px;margin:24px 0 14px}section{border-radius:8px;padding:20px;margin:16px 0;background:var(--surface)}button,input,select{min-height:38px;border-radius:6px}button{padding:8px 14px;font-weight:600}.secondary{background:var(--soft);border:1px solid var(--border)}input[type=checkbox],input[type=radio]{min-height:0;accent-color:#215b82}.badge{font-size:12px;border-radius:5px;padding:5px 9px}.subtitle,small{color:var(--muted)}.run-bar h2{font-size:12px;color:var(--muted);margin-bottom:8px}.run-bar .grid{align-items:center}.run-bar .grid>div:last-child .toolbar{justify-content:flex-end}.run-bar .grid>div:last-child h2{text-align:right}#devicePanel{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 0}#devicePanel summary{font-weight:600}#cases{margin-top:16px;border-top:1px solid var(--border)}#cases>.case-card{border:0;border-bottom:1px solid var(--border);border-radius:0;margin:0;padding:16px 0}.case>span{font:13px ui-monospace,monospace}.additional{border:0;margin-left:46px}.additional .schema-field{margin:10px 0}.schema-group{border:0;border-left:2px solid var(--border);border-radius:0}.log-panel pre{height:240px}.case-combo input,.result-combo input{margin-top:0}#casePicker,#resultChoices{box-shadow:0 4px 12px #0001;border-color:var(--border)}#casePicker button,#resultChoices button{font-size:13px;font-weight:400}.case-selection{gap:8px}dialog,html[data-theme=dark] dialog{background:var(--surface);color:var(--text);border-color:var(--border)}:focus-visible{outline:2px solid #4688be;outline-offset:2px}html[data-theme=dark] .ready,html[data-theme=dark] .PASS{background:#193b2c;color:#a3dfbb}html[data-theme=dark] .ERROR,html[data-theme=dark] .offline{background:#43272c;color:#ffb7bd}@media(max-width:700px){main{padding:0 14px}.run-bar .grid>div:last-child .toolbar{justify-content:flex-start}.run-bar .grid>div:last-child h2{text-align:left}.additional{margin-left:0}}
+
+.case-columns,#cases>.case-card{display:grid;grid-template-columns:minmax(180px,1fr) minmax(220px,1.3fr) auto;gap:20px;align-items:start}.case-columns{padding:10px 0;color:var(--muted);font-size:12px;background:var(--soft)}.case-identity{display:flex;align-items:center;gap:8px;min-width:0;font:13px ui-monospace,monospace;overflow-wrap:anywhere}.case-identity span{min-width:0}.case-actions{display:flex;gap:4px}.case-actions button{padding:6px 9px}.case-data .additional{margin:0;padding:0}.case-data .schema-field{margin-top:0}.case-data .schema-field-child{margin-left:0}.case-data{min-width:0}@media(hover:hover){.case-actions{opacity:.35}.case-card:hover .case-actions,.case-card:focus-within .case-actions{opacity:1}}@media(max-width:800px){.case-columns{display:none}#cases>.case-card{grid-template-columns:minmax(0,1fr) auto}.case-data{grid-row:2;grid-column:1/-1}.case-actions{grid-column:2;grid-row:1}}
+.sticky-header{position:sticky;top:0;z-index:30;background:#f3f5f8;padding:12px 0 1px;margin-top:-12px}.sticky-header .run-bar{margin-bottom:12px}html[data-theme=dark] .sticky-header{background:#101114}@media(max-width:700px){.sticky-header h1{font-size:20px}.sticky-header .subtitle{margin:6px 0}.sticky-header .run-bar{padding:12px;margin-top:10px}.sticky-header .run-bar .grid{gap:10px;grid-template-columns:1fr 1fr}.sticky-header .toolbar{gap:6px}.sticky-header button{padding:7px 10px}.sticky-header .run-bar .grid>div:last-child .toolbar{justify-content:flex-end}.sticky-header .run-bar .grid>div:last-child h2{text-align:right}}
+</style><main><header class="sticky-header"><button id="themeToggle" class="secondary" style="float:right" type="button">{{web.darkTheme}}</button><h1>{{web.title}}</h1><p class="subtitle">{{web.subtitle}}</p>
+<section class="run-bar"><div class="grid"><div><h2>{{web.appiumTitle}}</h2><div class="toolbar"><span id="appiumStatus" class="badge">{{web.checking}}</span><button id="appiumStart" class="secondary">{{web.openAppium}}</button></div></div><div><h2>{{web.testTitle}}</h2><div class="toolbar"><span id="runStatus" class="badge">{{web.idle}}</span><button id="start" disabled>{{web.start}}</button></div></div></div></section>
+</header><section><h2>{{web.runConfig}}</h2><fieldset id="fields" style="border:0;padding:0;margin:0"><div class="grid"><label>{{web.runName}}<input id="runName"></label><div><label>{{web.platform}}</label><div class="toolbar platform-options"><label><input type="radio" name="platform" value="iOS"> iOS</label><label><input type="radio" name="platform" value="Android"> Android</label></div></div></div><p><label><input type="checkbox" id="continueOnFail"> {{web.continueOnFail}}</label></p>
+<details id="devicePanel"><summary>{{web.deviceConfig}} <span id="devicePlatform"></span></summary><fieldset id="deviceFields" style="border:0;padding:0" disabled><div class="grid">
 <label>{{web.profileName}}<input id="profileName"></label><label>{{web.deviceType}}<select id="deviceType"></select></label>
 <label>{{web.deviceId}}<input id="deviceId"></label><label>{{web.appSource}}<select id="appSource"><option value="installed">{{web.installed}}</option><option value="file">{{web.file}}</option></select></label>
 <label id="appPathLabel">{{web.buildPath}}<input id="appPath"></label><label><span id="identityLabel">{{web.bundleId}}</span><input id="appIdentity"></label>
 <label id="activityLabel">{{web.appActivity}}<input id="appActivity"></label></div>
-</fieldset></div>
+</fieldset></details>
 
-<h3>{{web.caseOrder}}</h3><div class="case-selection"><div class="case-combo"><input id="caseSearch" type="search" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="casePicker" placeholder="ค้นหาและเลือก Test Case" aria-label="ค้นหาและเลือก Test Case" autocomplete="off"><div id="casePicker" role="listbox" hidden></div></div><button id="add" class="secondary" disabled>{{web.addCase}}</button><small id="caseSearchStatus" role="status" aria-live="polite"></small></div><div id="cases"></div>
+<h3>{{web.caseOrder}}</h3><div class="case-selection"><div class="case-combo"><input id="caseSearch" type="search" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="casePicker" placeholder="{{web.searchCases}}" aria-label="{{web.searchCases}}" autocomplete="off"><div id="casePicker" role="listbox" hidden></div></div><button id="add" class="secondary" disabled>{{web.addCase}}</button><small id="caseSearchStatus" role="status" aria-live="polite"></small></div><div id="cases"></div>
 </fieldset><div id="notice" role="status" aria-live="polite"></div></section>
 <div class="grid log-grid"><section class="log-panel"><div class="log-header"><h2 id="runLogTitle">{{web.testLog}}</h2><button type="button" class="secondary" data-expand-log="runLog" aria-haspopup="dialog" aria-label="{{web.expandTestLog}}">{{web.expandLog}}</button></div><pre id="runLog">{{web.emptyLog}}</pre></section><section class="log-panel"><div class="log-header"><h2 id="appiumLogTitle">{{web.appiumLog}}</h2><button type="button" class="secondary" data-expand-log="appiumLog" aria-haspopup="dialog" aria-label="{{web.expandAppiumLog}}">{{web.expandLog}}</button></div><pre id="appiumLog">{{web.appiumLogHint}}</pre></section></div>
-<dialog id="logDialog" class="log-dialog" aria-labelledby="expandedLogTitle"><div class="log-header"><h2 id="expandedLogTitle"></h2><button type="button" id="closeLog" class="secondary">{{web.collapseLog}}</button></div><div id="expandedLogBody"></div></dialog><section><h2>{{web.resultsTitle}}</h2><div class="toolbar"><div class="result-combo" style="position:relative;flex:1;min-width:240px"><input id="resultSearch" type="search" placeholder="ค้นหาและเลือกผลทดสอบ" aria-label="ค้นหาและเลือกผลทดสอบ" autocomplete="off"><div id="resultChoices" hidden></div></div><select hidden id="resultPicker" style="max-width:100%;width:auto" aria-label="{{web.chooseRun}}"></select><button id="refreshResults" class="secondary">{{web.refreshResults}}</button><button id="downloadExcel" class="secondary">{{web.downloadExcel}}</button><button id="downloadJson" class="secondary">{{web.downloadJson}}</button></div><p id="resultMessage"></p><dialog id="videoDialog"><div class="toolbar"><strong id="videoTitle"></strong><button id="closeVideo" type="button" class="secondary">ปิด</button></div><p id="videoMessage"></p><video id="resultVideo" controls playsinline style="display:block;max-width:100%;max-height:75vh;margin:auto"></video></dialog><iframe id="reportFrame" title="{{web.reportTitle}}" sandbox="allow-same-origin" style="width:100%;height:720px;border:1px solid #dae1e8;border-radius:8px" hidden></iframe></section></main>
+<dialog id="logDialog" class="log-dialog" aria-labelledby="expandedLogTitle"><div class="log-header"><h2 id="expandedLogTitle"></h2><button type="button" id="closeLog" class="secondary">{{web.collapseLog}}</button></div><div id="expandedLogBody"></div></dialog><section><h2>{{web.resultsTitle}}</h2><div class="toolbar"><div class="result-combo" style="position:relative;flex:1;min-width:240px"><input id="resultSearch" type="search" placeholder="{{web.searchResults}}" aria-label="{{web.searchResults}}" autocomplete="off"><div id="resultChoices" hidden></div></div><select hidden id="resultPicker" style="max-width:100%;width:auto" aria-label="{{web.chooseRun}}"></select><button id="refreshResults" class="secondary">{{web.refreshResults}}</button><button id="downloadExcel" class="secondary">{{web.downloadExcel}}</button><button id="downloadJson" class="secondary">{{web.downloadJson}}</button></div><p id="resultMessage"></p><dialog id="videoDialog"><div class="toolbar"><strong id="videoTitle"></strong><button id="closeVideo" type="button" class="secondary">{{web.close}}</button></div><p id="videoMessage"></p><video id="resultVideo" controls playsinline style="display:block;max-width:100%;max-height:75vh;margin:auto"></video></dialog><iframe id="reportFrame" title="{{web.reportTitle}}" sandbox="allow-same-origin" style="width:100%;height:720px;border:1px solid #dae1e8;border-radius:8px" hidden></iframe></section></main>
 <script type="module">
 import { renderSchemaForm } from "/Dashboard/schema-form.mjs";
 import { normalizeAdditionalData } from "/Shared/additional-data.mjs";
@@ -39,7 +46,8 @@ const token='__TOKEN__';const $=id=>document.getElementById(id);let config={},ca
 let connected=false,polling=false;
 function setTheme(dark){
  document.documentElement.dataset.theme=dark?'dark':'light';
- $('themeToggle').textContent=dark?'ธีมสว่าง':'ธีมมืด';
+ const report=$('reportFrame').contentDocument;if(report)report.documentElement.dataset.theme=dark?'dark':'light';
+ $('themeToggle').textContent=dark?webLocalized.lightTheme:webLocalized.darkTheme;
  $('themeToggle').setAttribute('aria-pressed',String(dark));
 }
 setTheme(localStorage.getItem('theme')==='dark');
@@ -96,6 +104,11 @@ function draw(){
  document.querySelectorAll('input[name=platform]').forEach(input=>input.checked=input.value===config.platform);
  $('continueOnFail').checked=config.shouldContinueNextCaseWhenFail??true;
  const list=$('cases');list.replaceChildren();
+ const columns=document.createElement('div');columns.className='case-columns';
+ for(const text of [webLocalized.caseColumn,webLocalized.dataColumn,webLocalized.actionsColumn]){
+  const cell=document.createElement('span');cell.textContent=text;columns.append(cell);
+ }
+ list.append(columns);
  (config.testCases??[]).forEach((entry,index)=>{
   const row=document.createElement('div');row.className='case-card';row.dataset.index=index;
   const header=document.createElement('div');header.className='case';
@@ -107,19 +120,25 @@ function draw(){
   row.ondrop=event=>{event.preventDefault();if(dragIndex!==null)move(dragIndex,index);dragIndex=null;};
   header.append(handle);const label=document.createElement('span');label.textContent=(index+1)+'. '+entry.case.id;header.append(label);
   for(const [text,offset]of [['↑',-1],['↓',1],[webLocalized.delete,0]]){const button=document.createElement('button');button.className='secondary';button.textContent=text;button.setAttribute('aria-label',text+webLocalized.caseSuffix+(index+1));button.disabled=offset!==0&&(index+offset<0||index+offset>=config.testCases.length);button.onclick=()=>{if(offset)move(index,index+offset);else{config=collect();config.testCases.splice(index,1);draw();}};header.append(button);}
-  row.append(header);
+  const identity=document.createElement('div');identity.className='case-identity';
+  const actions=document.createElement('div');actions.className='case-actions';
+  identity.append(handle,label);
+  for(const button of [...header.querySelectorAll('button')])actions.append(button);
+  row.append(identity);
+  const dataCell=document.createElement('div');dataCell.className='case-data';
+  row.append(dataCell,actions);
   const schema=schemas[entry.case.id];
   if(schema){
     entry.case.additionalData=normalizeAdditionalData(schema,entry.case.additionalData??{},{validate:false});
     const fields=document.createElement('div');fields.className='additional';
     const render=()=>renderSchemaForm(fields,schema,entry.case.additionalData,next=>{entry.case.additionalData=next;render();},webLocalized);
-    render();row.append(fields);
-  }else if(entry.case.additionalData!==undefined){const fields=additionalFields(entry.case.additionalData,entry.case,'additionalData',webLocalized.additionalData);fields.className='additional';row.append(fields);}
+    render();dataCell.append(fields);
+  }else if(entry.case.additionalData!==undefined){const fields=additionalFields(entry.case.additionalData,entry.case,'additionalData',webLocalized.additionalData);fields.className='additional';dataCell.append(fields);}
   list.append(row);
  });
 }
 async function action(fn){if(pending)return;pending=true;controls();try{await fn();}catch(error){notice(error.message);}finally{pending=false;controls();}}
-async function save(){for(const input of $('fields').querySelectorAll('input,select'))if(!input.reportValidity())throw Error(webLocalized.checkFields);config=collect();const result=await api('config','POST',config);draw();notice(result.message);}
+async function save(){for(const input of $('fields').querySelectorAll('input,select'))if(!input.checkValidity()){if(input.closest('#devicePanel'))$('devicePanel').open=true;input.reportValidity();throw Error(webLocalized.checkFields);}config=collect();const result=await api('config','POST',config);draw();notice(result.message);}
 $('start').onclick=()=>action(async()=>{await saveDevice();await save();notice((await api('run/start','POST',{})).message);running=true;await poll();});$('appiumStart').onclick=()=>action(async()=>{notice((await api((appiumState!=='offline'||running)?'appium/stop':'appium/start','POST',{})).message);await poll();});
 $('add').onclick=()=>{config=collect();const source=catalog[selectedCaseIndex];if(!source)return;config.testCases.push(structuredClone(source.entry));draw();};
 let selectedCaseIndex=null;
@@ -143,7 +162,7 @@ function filterCases(show=false){
    closeCasePicker();
    $('caseSearch').focus();
    closeCasePicker();
-   $('caseSearchStatus').textContent='เลือก '+item.name;
+   $('caseSearchStatus').textContent=webLocalized.selectedCase+item.name;
   };
   option.onkeydown=event=>{
    if(event.key==='ArrowDown'){event.preventDefault();option.nextElementSibling?.focus();}
@@ -156,7 +175,7 @@ function filterCases(show=false){
  list.hidden=!show||count===0;
  $('caseSearch').setAttribute('aria-expanded',String(!list.hidden));
  $('add').disabled=selectedCaseIndex===null;
- $('caseSearchStatus').textContent=count ? `พบ ${count} เคส — เลือกเคสแล้วกดเพิ่มเคส` : 'ไม่พบ Test Case ที่ตรงกับคำค้น';
+ $('caseSearchStatus').textContent=count ? webLocalized.searchCount.replace('{count}',count) : webLocalized.noMatchingCases;
 }
 $('caseSearch').oninput=()=>{selectedCaseIndex=null;filterCases(true);};
 $('caseSearch').onfocus=()=>filterCases(true);
@@ -175,7 +194,7 @@ async function loadDevice(platform){collectDevice();const version=++deviceReques
 async function saveDevice(){if(deviceLoading||!devicePlatform)throw Error(webLocalized.deviceLoading);collectDevice();notice((await api('device','POST',deviceDrafts[devicePlatform])).message);}
 $('appSource').onchange=deviceVisibility;
 document.querySelectorAll('input[name=platform]').forEach(input=>input.onchange=()=>{config=collect();loadDevice(input.value);});
-async function resultBlob(file){const run=$('resultPicker').value;if(!run)throw Error(webLocalized.noResults);const response=await fetch('/api/results/file?run='+encodeURIComponent(run)+'&file='+encodeURIComponent(file),{headers:{'X-Dashboard-Token':token}});if(!response.ok){const detail=await response.json().catch(()=>({}));throw Error(detail.error==='Invalid result path'?'Dashboard ที่เปิดอยู่ยังไม่รองรับไฟล์นี้ กรุณาปิดแล้วเปิด StartDashboard.command ใหม่':detail.error??(webLocalized.missingFile+file+webLocalized.inRun));}return response.blob();}
+async function resultBlob(file){const run=$('resultPicker').value;if(!run)throw Error(webLocalized.noResults);const response=await fetch('/api/results/file?run='+encodeURIComponent(run)+'&file='+encodeURIComponent(file),{headers:{'X-Dashboard-Token':token}});if(!response.ok){const detail=await response.json().catch(()=>({}));throw Error(detail.error==='Invalid result path'?webLocalized.restartDashboard:detail.error??(webLocalized.missingFile+file+webLocalized.inRun));}return response.blob();}
 let reportRequest=0;
 let videoUrl=null,videoRequest=0;
 function clearVideos(){
@@ -187,8 +206,8 @@ $('closeVideo').onclick=()=>$('videoDialog').close();
 $('videoDialog').addEventListener('close',clearVideos);
 async function openVideo(item){
  clearVideos();const request=videoRequest;
- $('videoTitle').textContent='เคส #'+item.executionIndex+' '+item.caseId;
- $('videoMessage').textContent='กำลังโหลดวิดีโอ…';
+ $('videoTitle').textContent=webLocalized.caseNumber+item.executionIndex+' '+item.caseId;
+ $('videoMessage').textContent=webLocalized.loadingVideo;
  $('videoDialog').showModal();
  try{
   const blob=await resultBlob('case-'+item.executionIndex+'.mp4');
@@ -197,10 +216,11 @@ async function openVideo(item){
   $('videoMessage').textContent='';
  }catch(error){if(request===videoRequest)$('videoMessage').textContent=error.message;}
 }
-$('resultVideo').onerror=()=>{if($('resultVideo').getAttribute('src'))$('videoMessage').textContent='เบราว์เซอร์ไม่สามารถเล่นวิดีโอนี้ได้';};
+$('resultVideo').onerror=()=>{if($('resultVideo').getAttribute('src'))$('videoMessage').textContent=webLocalized.videoUnsupported;};
 function bindReportVideos(result){
  const doc=$('reportFrame').contentDocument;
  if(!doc)return;
+ doc.documentElement.dataset.theme=document.documentElement.dataset.theme;
  for(const button of doc.querySelectorAll('[data-video-case]')){
   const item=(result.cases??[]).find(item=>String(item.executionIndex)===button.dataset.videoCase);
   if(item)button.onclick=()=>openVideo(item);
@@ -213,10 +233,15 @@ function filterResults(){
  for(const option of $('resultPicker').options){
   if(!option.textContent.toLowerCase().includes(query))continue;
   const button=document.createElement('button');button.type='button';button.textContent=option.textContent;
+  button.onkeydown=event=>{
+   if(event.key==='ArrowDown'){event.preventDefault();button.nextElementSibling?.focus();}
+   if(event.key==='ArrowUp'){event.preventDefault();if(button.previousElementSibling)button.previousElementSibling.focus();else $('resultSearch').focus();}
+   if(event.key==='Escape'){$('resultSearch').focus();list.hidden=true;}
+  };
   button.onclick=()=>{$('resultPicker').value=option.value;$('resultSearch').value=option.textContent;list.hidden=true;showResult();};
   list.append(button);
  }
- if(!list.children.length)list.textContent='ไม่พบผลทดสอบ';
+ if(!list.children.length)list.textContent=webLocalized.noMatchingResults;
  list.hidden=false;
 }
 $('resultSearch').oninput=filterResults;
@@ -226,11 +251,14 @@ $('resultSearch').onkeydown=event=>{
  if(event.key==='ArrowDown'){event.preventDefault();$('resultChoices').querySelector('button')?.focus();}
 };
 document.addEventListener('click',event=>{if(!event.target.closest('.result-combo'))$('resultChoices').hidden=true;});
+document.querySelector('.result-combo').addEventListener('focusout',event=>{
+ if(!event.currentTarget.contains(event.relatedTarget))$('resultChoices').hidden=true;
+});
 async function showResult(){const version=++reportRequest;clearVideos();if($('videoDialog').open)$('videoDialog').close();$('reportFrame').hidden=true;try{const [blob,resultBlobData]=await Promise.all([resultBlob('report.html'),resultBlob('result.json')]);const result=JSON.parse(await resultBlobData.text());const text=await blob.text();if(version!==reportRequest)return;const doc=new DOMParser().parseFromString(text,'text/html');doc.querySelectorAll('a').forEach(a=>a.remove());$('reportFrame').onload=()=>{if(version===reportRequest)bindReportVideos(result);};$('reportFrame').srcdoc=doc.documentElement.outerHTML;$('reportFrame').hidden=false;$('resultMessage').textContent=webLocalized.reportFromResults;}catch(error){if(version===reportRequest)$('resultMessage').textContent=error.message;}}
-async function refreshResults({selectLatest=false}={}){try{const data=await api('results');const signature=JSON.stringify(data.results);if(signature===resultSignature&&!selectLatest)return;resultSignature=signature;const previous=$('resultPicker').value;$('resultPicker').replaceChildren();for(const result of data.results){const option=document.createElement('option');option.value=result.folder;option.textContent=result.folder+' — '+result.status;$('resultPicker').append(option);}if(!selectLatest&&data.results.some(item=>item.folder===previous))$('resultPicker').value=previous;$('resultSearch').value=$('resultPicker').selectedOptions[0]?.textContent??'';$('resultChoices').hidden=true;await showResult();}catch(error){$('resultMessage').textContent=error.message;}}
+async function refreshResults({selectLatest=false}={}){try{const data=await api('results');const signature=JSON.stringify(data.results);if(signature===resultSignature&&!selectLatest)return;resultSignature=signature;const previous=$('resultPicker').value;$('resultPicker').replaceChildren();for(const result of data.results){const option=document.createElement('option');option.value=result.folder;option.textContent=result.folder+' — '+(webLocalized['status'+result.status]??result.status);$('resultPicker').append(option);}if(!selectLatest&&data.results.some(item=>item.folder===previous))$('resultPicker').value=previous;$('resultSearch').value=$('resultPicker').selectedOptions[0]?.textContent??'';$('resultChoices').hidden=true;await showResult();}catch(error){$('resultMessage').textContent=error.message;}}
 $('resultPicker').onchange=showResult;$('refreshResults').onclick=()=>{resultSignature='';refreshResults();};
 for(const [id,file]of [['downloadExcel','report.xlsx'],['downloadJson','result.json']])$(id).onclick=async()=>{try{const url=URL.createObjectURL(await resultBlob(file));const link=document.createElement('a');link.href=url;link.download=$('resultPicker').value+'_'+file;link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}catch(error){$('resultMessage').textContent=error.message;}};
-async function poll(){if(polling)return;polling=true;try{const data=await api('status');connected=true;appiumState=data.appium;ready=data.appium==='ready';const wasRunning=running;running=data.run.status==='running';if(wasRunning&&!running)refreshResults({selectLatest:true});$('appiumStatus').textContent=({ready:webLocalized.ready,offline:webLocalized.offline,starting:webLocalized.starting,unavailable:webLocalized.unavailable,stopping:webLocalized.stopping})[data.appium];$('appiumStatus').className='badge '+data.appium;$('runStatus').textContent=({idle:webLocalized.idle,running:webLocalized.running,STOPPED:webLocalized.stopped})[data.run.status]??data.run.status;$('runStatus').className='badge '+data.run.status;for(const kind of ['run','appium']){const el=$(kind+'Log');if(data.logs[kind]&&el.textContent!==data.logs[kind]){const bottom=el.scrollTop+el.clientHeight>=el.scrollHeight-30;el.textContent=data.logs[kind];if(bottom)el.scrollTop=el.scrollHeight;}}}catch(error){connected=false;ready=false;$('appiumStatus').textContent=webLocalized.disconnected;$('appiumStatus').className='badge ERROR';notice(webLocalized.reconnect+error.message+')');}finally{polling=false;controls();}}
+async function poll(){if(polling)return;polling=true;try{const data=await api('status');connected=true;appiumState=data.appium;ready=data.appium==='ready';const wasRunning=running;running=data.run.status==='running';if(wasRunning&&!running)refreshResults({selectLatest:true});$('appiumStatus').textContent=({ready:webLocalized.ready,offline:webLocalized.offline,starting:webLocalized.starting,unavailable:webLocalized.unavailable,stopping:webLocalized.stopping})[data.appium];$('appiumStatus').className='badge '+data.appium;$('runStatus').textContent=({idle:webLocalized.idle,running:webLocalized.running,STOPPED:webLocalized.stopped})[data.run.status]??webLocalized['status'+data.run.status]??data.run.status;$('runStatus').className='badge '+data.run.status;for(const kind of ['run','appium']){const el=$(kind+'Log');if(data.logs[kind]&&el.textContent!==data.logs[kind]){const bottom=el.scrollTop+el.clientHeight>=el.scrollHeight-30;el.textContent=data.logs[kind];if(bottom)el.scrollTop=el.scrollHeight;}}}catch(error){connected=false;ready=false;$('appiumStatus').textContent=webLocalized.disconnected;$('appiumStatus').className='badge ERROR';notice(webLocalized.reconnect+error.message+')');}finally{polling=false;controls();}}
 poll();setInterval(poll,2000);
 (async()=>{try{const data=await api('config');config={...data.config,runName:'',shouldContinueNextCaseWhenFail:true};catalog=data.cases;schemas=data.schemas??{};filterCases();draw();loaded=true;await loadDevice(config.platform);await refreshResults();}catch(error){notice(error.message);}controls();})();
 </script></html>

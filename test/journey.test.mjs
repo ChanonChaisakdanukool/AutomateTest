@@ -49,7 +49,7 @@ test('HTML and Excel preserve executed and skipped steps with safe literal label
   const result = { status: 'ERROR', cases: [{ executionIndex: 1, caseId: 'test', status: 'ERROR', steps, failedStep: 'verify' }], errors: [], skippedCases: [], startedAt: new Date().toISOString(), finishedAt: new Date().toISOString() };
   const html = renderReport(result);
   assert.ok(html.includes('&lt;script&gt;ตรวจค่า&lt;/script&gt;')); assert.ok(!html.includes('<script>ตรวจค่า'));
-  assert.ok(html.includes('SKIPPED')); assert.ok(html.includes('Step: verify'));
+  assert.ok(html.includes('SKIPPED')); assert.ok(html.includes('ตรวจพบปัญหาที่ขั้นตอน: verify'));
   const book = new ExcelJS.Workbook(); await book.xlsx.load(await createExcelReport(result, getTimelineEntries(result)));
   const sheet = book.getWorksheet('Journey ราย Step');
   assert.equal(sheet.getCell('F5').value, 'ERROR'); assert.equal(sheet.getCell('F6').value, 'SKIPPED');

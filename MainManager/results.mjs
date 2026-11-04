@@ -1,3 +1,4 @@
+import { webLocalized } from '../Localization/web-th.mjs';
 import { mkdir, readFile, writeFile, rename, appendFile, readdir, access, mkdtemp } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -48,47 +49,53 @@ export function getTimelineEntries(result) {
 }
 
 function renderTimeline(result) {
-  return getTimelineEntries(result).map(([at, description, status]) => `<tr><td>${escapeHtml(thaiTime(at))}</td><td>${escapeHtml(description)}</td><td>${escapeHtml(status)}</td></tr>`).join('');
+  return getTimelineEntries(result).map(([at, description, status]) => `<tr><td>${escapeHtml(thaiTime(at))}</td><td>${escapeHtml(description)}</td><td>${escapeHtml(webLocalized['status'+status]??status)}</td></tr>`).join('');
 }
 
 /** แสดงทุก execution แยกกัน รวมขั้นตอนที่ยังไม่ได้ทำตามแผน */
 function renderJourneys(result) {
   return result.cases.map(item => {
-    const rows = (item.steps ?? []).map(step => `<tr><td>${step.stepIndex}</td><td>${escapeHtml(step.stepId)}</td><td>${escapeHtml(step.stepName)}</td><td>${escapeHtml(step.status)}</td><td>${escapeHtml(thaiTime(step.startedAt))}</td><td>${escapeHtml(thaiTime(step.finishedAt))}</td><td>${step.durationMs ?? '—'}</td><td>${escapeHtml(step.error?.message)}</td></tr>`).join('');
-    return `<h3>เคส #${item.executionIndex} ${escapeHtml(item.caseId)} — ${escapeHtml(item.status)}</h3>${item.failedStep ? `<p class="step-problem" style="color:#b42318;font-weight:700"><span aria-hidden="true">⚠</span> ตรวจพบปัญหาที่ Step: ${escapeHtml(item.failedStep)}</p>` : ''}${item.video?.status === 'unavailable' ? `<p>วิดีโอไม่พร้อมใช้งาน (${escapeHtml(item.video.phase)}) · ${escapeHtml(item.video.error.message)}</p>` : ''}${rows ? `<div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Step ID</th><th>ขั้นตอน</th><th>ผล</th><th>เริ่ม (ไทย)</th><th>จบ (ไทย)</th><th>ms</th><th>รายละเอียดปัญหา</th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p>เคสนี้ยังไม่มีการบันทึก Step</p>'}`;
-  }).join('') || '<p>ยังไม่มีเคสเริ่มทำงานในรอบนี้</p>';
+    const rows = (item.steps ?? []).map(step => `<tr><td>${step.stepIndex}</td><td>${escapeHtml(step.stepId)}</td><td>${escapeHtml(step.stepName)}</td><td title="${escapeHtml(step.status)}">${escapeHtml(webLocalized['status'+step.status] ?? step.status)}</td><td>${escapeHtml(thaiTime(step.startedAt))}</td><td>${escapeHtml(thaiTime(step.finishedAt))}</td><td>${step.durationMs ?? '—'}</td><td>${escapeHtml(step.error?.message)}</td></tr>`).join('');
+    return `<h3>เคส #${item.executionIndex} ${escapeHtml(item.caseId)} — ${escapeHtml(webLocalized['status'+item.status] ?? item.status)}</h3>${item.failedStep ? `<p class="step-problem" ><span aria-hidden="true">⚠</span> ${webLocalized.failedStep}: ${escapeHtml(item.failedStep)}</p>` : ''}${item.video?.status === 'unavailable' ? `<p>${webLocalized.videoUnavailable} (${escapeHtml(item.video.phase)}) · ${escapeHtml(item.video.error.message)}</p>` : ''}${rows ? `<div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Step ID</th><th>${webLocalized.reportStep}</th><th>ผล</th><th>${webLocalized.reportStart}</th><th>${webLocalized.reportFinish}</th><th>ms</th><th>${webLocalized.reportProblem}</th></tr></thead><tbody>${rows}</tbody></table></div>` : `<p>${webLocalized.reportNoSteps}</p>`}`;
+  }).join('') || `<p>${webLocalized.reportNoCases}</p>`;
 }
 
 /** รายงานอ่านจากผลดิบเท่านั้น ไม่ฝัง Config หรือ additionalData */
 export function renderReport(result) {
   const rows = [...result.cases, ...result.skippedCases.map(item => ({ ...item, status: 'SKIPPED' }))]
     .sort((a, b) => a.executionIndex - b.executionIndex)
-    .map(item => `<tr class="${['PASS', 'FAIL', 'ERROR'].includes(item.status) ? item.status : ''}"><td>${item.executionIndex}</td><td>${escapeHtml(item.caseId)}${['FAIL', 'ERROR'].includes(item.status) && item.video?.status === 'saved' ? `<div class="video-action"><button type="button" data-video-case="${item.executionIndex}">ดูวิดีโอ</button></div>` : ''}</td><td>${escapeHtml(item.status)}</td><td>${item.durationMs ?? '—'}</td><td>${escapeHtml(item.error?.message)}</td></tr>`).join('');
-  return `<!doctype html><html lang="th"><meta charset="utf-8"><title>Automation Result</title>
-<style>body{font:16px system-ui;max-width:1100px;margin:40px auto;padding:0 24px;color:#18252f}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccd5db;padding:12px;text-align:left}pre{white-space:pre-wrap;overflow-wrap:anywhere}h1{color:#17675c}tr.PASS{background:#e6f4ea}tr.ERROR,tr.FAIL{background:#fde9e9}.video-action{margin-top:10px}button{padding:8px 16px;cursor:pointer;border:0;border-radius:6px;background:#215b82;color:white;font:inherit}dialog{width:min(900px,94vw);border:1px solid #bcc9d5;border-radius:12px;padding:20px}dialog::backdrop{background:#000a}video{display:block;max-width:100%;max-height:75vh;margin:12px auto}</style>
-<h1>${escapeHtml(result.runName ?? 'Automation run')} — ${escapeHtml(result.status)}</h1>
-<p><strong>Run ID:</strong> ${escapeHtml(result.runId)}</p><p><strong>เวลาไทย (Asia/Bangkok):</strong> ${escapeHtml(thaiTime(result.startedAt))} → ${escapeHtml(thaiTime(result.finishedAt))} (${result.durationMs} ms)</p>
-<p><strong>Platform:</strong> ${escapeHtml(result.platform ?? 'unknown')}</p>
-<table><thead><tr><th>#</th><th>Case</th><th>Result</th><th>ms</th><th>Error</th></tr></thead><tbody>${rows}</tbody></table>
-<h2>Journey ราย Step ของแต่ละ Test Case</h2>
+    .map(item => `<tr class="${['PASS', 'FAIL', 'ERROR'].includes(item.status) ? item.status : ''}"><td>${item.executionIndex}</td><td class="case-name">${escapeHtml(item.caseId)}${['FAIL', 'ERROR'].includes(item.status) && item.video?.status === 'saved' ? `<div class="video-action"><button type="button" data-video-case="${item.executionIndex}">${webLocalized.reportVideo}</button></div>` : ''}</td><td>${escapeHtml(webLocalized['status'+item.status] ?? item.status)}</td><td>${item.durationMs ?? '—'}</td><td>${escapeHtml(item.error?.message)}</td></tr>`).join('');
+  return `<!doctype html><html lang="th"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${webLocalized.reportTitle}</title>
+<style>body{font:16px system-ui;max-width:1100px;margin:40px auto;padding:0 24px;color:#18252f}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccd5db;padding:12px;text-align:left}pre{white-space:pre-wrap;overflow-wrap:anywhere}h1{color:#17675c}tr.PASS{background:#e6f4ea}tr.ERROR,tr.FAIL{background:#fde9e9}.video-action{margin-top:10px}button{padding:8px 16px;cursor:pointer;border:0;border-radius:6px;background:#215b82;color:white;font:inherit}dialog{width:min(900px,94vw);border:1px solid #bcc9d5;border-radius:12px;padding:20px}dialog::backdrop{background:#000a}video{display:block;max-width:100%;max-height:75vh;margin:12px auto}
+:root{color-scheme:light;--bg:#fff;--text:#242b35;--border:#dce1e7;--soft:#f6f8fa;--pass:#eaf5ee;--error:#fceced;--problem:#b42318}
+html[data-theme=dark]{color-scheme:dark;--bg:#1b1e24;--text:#e1e6ef;--border:#363d48;--soft:#222730;--pass:#193b2c;--error:#43272c;--problem:#ffb7bd}
+@media(prefers-color-scheme:dark){html:not([data-theme=light]){color-scheme:dark;--bg:#1b1e24;--text:#e1e6ef;--border:#363d48;--soft:#222730;--pass:#193b2c;--error:#43272c;--problem:#ffb7bd}}
+body{font:14px/1.6 system-ui,sans-serif;color:var(--text);background:var(--bg);margin:24px auto;padding:0 20px}h1{font-size:24px;color:var(--text);margin:20px 0 12px}h2{font-size:18px;margin-top:32px}h3{font-size:15px}td,th{border-color:var(--border);padding:10px 12px;overflow-wrap:anywhere}th{background:var(--soft);font-size:12px}tr.PASS{background:var(--pass)}tr.ERROR,tr.FAIL{background:var(--error)}.case-name{font-family:ui-monospace,monospace}.step-problem{color:var(--problem);font-weight:700}dialog{background:var(--bg);color:var(--text);border-color:var(--border);border-radius:8px}.summary-strip{display:flex;flex-wrap:wrap;gap:20px;padding:14px 0;border-bottom:1px solid var(--border)}.summary-strip strong{font-size:20px}button{font-size:13px}a{color:#4688be}
+</style>
+<div class="summary-strip">${['PASS','FAIL','ERROR','SKIPPED'].map(status=>`<span><strong>${status==='SKIPPED'?result.skippedCases.length:result.cases.filter(item=>item.status===status).length}</strong> ${webLocalized['status'+status]}</span>`).join('')}<span>${Number.isFinite(result.durationMs)?(result.durationMs/1000).toFixed(1):'—'} s</span></div>
+<h1>${escapeHtml(result.runName ?? 'Automation run')} — ${escapeHtml(webLocalized['status'+result.status] ?? result.status)}</h1>
+<p><strong>${webLocalized.reportRunId}:</strong> ${escapeHtml(result.runId)}</p><p><strong>${webLocalized.reportThaiTime}:</strong> ${escapeHtml(thaiTime(result.startedAt))} → ${escapeHtml(thaiTime(result.finishedAt))} (${result.durationMs} ms)</p>
+<p><strong>${webLocalized.platform}:</strong> ${escapeHtml(result.platform ?? 'unknown')}</p>
+<table><thead><tr><th>#</th><th>${webLocalized.reportCase}</th><th>${webLocalized.reportResult}</th><th>ms</th><th>${webLocalized.reportError}</th></tr></thead><tbody>${rows}</tbody></table>
+<h2>${webLocalized.reportSteps}</h2>
 ${renderJourneys(result)}
-<h2>ลำดับการทำงาน</h2>
-<p>เวลาไทย (UTC+7) · PASS = ผ่าน · FAIL = พฤติกรรมไม่ตรงตามคาด · ERROR = ระบบทำงานผิดพลาด · SKIPPED = ไม่ได้รัน</p>
-<table><thead><tr><th>วันและเวลา</th><th>เหตุการณ์</th><th>ผล</th></tr></thead><tbody>${renderTimeline(result)}</tbody></table>
-<h2>ข้อผิดพลาดระดับชุดทดสอบ</h2><pre>${escapeHtml(JSON.stringify(result.errors, null, 2))}</pre>
-<p>ระบบเก็บวิดีโอสำหรับเคส FAIL หรือ ERROR เมื่อ Appium อัดหน้าจอได้</p><p><a href="report.xlsx">ดาวน์โหลด Excel</a> · <a href="result.json">ผลดิบ JSON</a> · <a href="journal.jsonl">Journal</a></p>
-<dialog id="reportVideoDialog"><button type="button" id="reportVideoClose">ปิด</button><p id="reportVideoMessage"></p><video id="reportVideo" controls playsinline></video></dialog>
+<h2>${webLocalized.reportTimeline}</h2>
+<p>${webLocalized.reportLegend}</p>
+<table><thead><tr><th>${webLocalized.reportTime}</th><th>${webLocalized.reportEvent}</th><th>ผล</th></tr></thead><tbody>${renderTimeline(result)}</tbody></table>
+<h2>${webLocalized.reportErrors}</h2><pre>${escapeHtml(JSON.stringify(result.errors, null, 2))}</pre>
+<p>${webLocalized.reportVideoPolicy}</p><p><a href="report.xlsx">${webLocalized.downloadExcel}</a> · <a href="result.json">${webLocalized.reportRaw}</a> · <a href="journal.jsonl">Journal</a></p>
+<dialog id="reportVideoDialog"><button type="button" id="reportVideoClose">${webLocalized.close}</button><p id="reportVideoMessage"></p><video id="reportVideo" controls playsinline></video></dialog>
 <script>
 const dialog=document.getElementById('reportVideoDialog');
 const video=document.getElementById('reportVideo');
 const message=document.getElementById('reportVideoMessage');
 document.querySelectorAll('[data-video-case]').forEach(button=>button.onclick=()=>{
- message.textContent='เคส #'+button.dataset.videoCase;
+ message.textContent='${webLocalized.caseNumber}'+button.dataset.videoCase;
  video.src='case-'+button.dataset.videoCase+'.mp4';dialog.showModal();
 });
 document.getElementById('reportVideoClose').onclick=()=>dialog.close();
 dialog.addEventListener('close',()=>{video.pause();video.removeAttribute('src');video.load();});
-video.onerror=()=>{if(video.getAttribute('src'))message.textContent='ไม่สามารถเล่นวิดีโอได้ กรุณาตรวจไฟล์คลิปและรูปแบบวิดีโอ';};
+video.onerror=()=>{if(video.getAttribute('src'))message.textContent='${webLocalized.videoUnsupported}';};
 </script></html>`;
 }
 
