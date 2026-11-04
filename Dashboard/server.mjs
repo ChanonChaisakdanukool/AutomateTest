@@ -120,7 +120,7 @@ async function saveConfig(config) {
 }
 
 async function resultFile(runName, file) {
-  if (!runName || runName.includes('/') || runName.includes('\\') || !['report.html', 'report.xlsx', 'result.json', 'journal.jsonl'].includes(file)) throw new Error('Invalid result path');
+  if (!runName || runName.includes('/') || runName.includes('\\') || (!['report.html', 'report.xlsx', 'result.json', 'journal.jsonl'].includes(file) && !/^case-[1-9][0-9]*\.mp4$/.test(file))) throw new Error('Invalid result path');
   const resultsRoot = await realpath(join(root, 'Results'));
   const target = await realpath(join(resultsRoot, runName, file));
   if (!target.startsWith(resultsRoot + '/')) throw new Error('Invalid result path');
@@ -199,7 +199,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && url.pathname === '/api/results/file') {
       const file = url.searchParams.get('file');
       const content = await readFile(await resultFile(url.searchParams.get('run'), file));
-      res.writeHead(200, { 'Content-Type': file === 'report.html' ? 'text/html; charset=utf-8' : 'application/octet-stream' });
+      res.writeHead(200, { 'Content-Type': file === 'report.html' ? 'text/html; charset=utf-8' : file.endsWith('.mp4') ? 'video/mp4' : 'application/octet-stream' });
       return res.end(content);
     }
     if (req.method === 'GET' && req.url === '/api/status') return json(200, { appium: await appiumStatus(), run: runState, logs });

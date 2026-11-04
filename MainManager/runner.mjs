@@ -111,7 +111,10 @@ export async function runAutomation({
       let recording = false;
       if (saveVideo) {
         try {
-          await driver.startRecordingScreen({ forceRestart: true });
+          await driver.startRecordingScreen({
+            forceRestart: true,
+            ...(deviceConfig.platform === 'iOS' ? { videoType: 'libx264', pixelFormat: 'yuv420p' } : {}),
+          });
           recording = true;
         } catch (error) {
           result.video = { status: 'unavailable', phase: 'start', error: describeError(error) };

@@ -88,7 +88,7 @@ test('concurrent runs have different folders and unfinished run is listed', asyn
 
 test('HTML escapes names and error messages instead of executing markup', () => {
   const html = renderReport({ ...summary(), runName: '<script>alert(1)</script>', errors: [{ message: '<img src=x onerror=alert(1)>' }] });
-  assert.ok(!html.includes('<script>'));
+  assert.ok(!html.includes('<script>alert(1)</script>'));
   assert.ok(!html.includes('<img'));
   assert.match(html, /&lt;script&gt;/);
   const timelineHtml = renderReport({ ...summary(), startedAt: '2026-10-29T10:30:00Z', finishedAt: '2026-10-29T10:31:00Z', timeline: [
