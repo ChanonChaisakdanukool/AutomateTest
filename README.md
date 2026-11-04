@@ -8,7 +8,8 @@ Appium + WebdriverIO สำหรับทดสอบแอปจาก Config 
 2. เตรียม Config/Local/DeviceConfig.ios.json หรือ DeviceConfig.android.json จาก Config/Examples
 3. เตรียม Config/Local/RunConfig.json จากตัวอย่าง ใส่ platform และค่ากลางให้ตรงสภาพแวดล้อม
 4. เปิด Simulator/อุปกรณ์และติดตั้ง build ที่ผูก IDs ล่าสุด
-5. ดับเบิลคลิก StartAppium.command แล้วเปิด RunAutomate.command
+5. หากต้องการวิดีโอสำหรับเคส iOS ที่เป็น `FAIL` หรือ `ERROR` ให้ติดตั้ง FFmpeg ด้วย `brew install ffmpeg` เพื่อให้ Appium เรียกใช้จาก `PATH` ได้
+6. ดับเบิลคลิก StartAppium.command แล้วเปิด RunAutomate.command
 
 Launcher อ่าน RunConfig โดยไม่ถามเลือกไฟล์ platform=iOS เลือก Config/Local/DeviceConfig.ios.json และ platform=Android เลือก DeviceConfig.android.json ตรวจ platform ให้ตรงกันก่อนสร้าง session
 

@@ -54,6 +54,7 @@ export async function runAutomation({
   createSession = remote,
   coreFactory = createCore,
   onEvent = async () => {},
+  saveVideo,
 }) {
   const testConfig = await loadTestCaseConfig(testCasePath, registry);
   const selectedDevicePath = devicePath ?? selectDeviceConfig(testConfig.platform);
@@ -107,6 +108,16 @@ export async function runAutomation({
       result.startedAt = new Date().toISOString();
       await onEvent({ event: 'caseStarted', executionIndex: result.executionIndex, caseId: result.caseId });
 
+      let recording = false;
+      if (saveVideo) {
+        try {
+          await driver.startRecordingScreen({ forceRestart: true });
+          recording = true;
+        } catch (error) {
+          result.video = { status: 'unavailable', phase: 'start', error: describeError(error) };
+        }
+      }
+
       try {
         // Clone ต่อ execution ป้องกันเคสแก้ข้อมูลแล้วส่งผลต่อ duplicate case ถัดไป
         await registry.get(definition.id)({
@@ -126,6 +137,20 @@ export async function runAutomation({
       }
       result.finishedAt = new Date().toISOString();
       result.durationMs = Math.round(performance.now() - caseStart);
+      if (recording) {
+        let videoPhase = 'stop';
+        try {
+          const encoded = await driver.stopRecordingScreen();
+          if (result.status !== 'PASS') {
+            if (!encoded) throw new Error('Appium returned an empty screen recording.');
+            videoPhase = 'save';
+            const path = await saveVideo(result.executionIndex, Buffer.from(encoded, 'base64'));
+            result.video = { status: 'saved', path };
+          }
+        } catch (error) {
+          result.video = { status: 'unavailable', phase: videoPhase, error: describeError(error) };
+        }
+      }
       summary.cases.push(result);
       await onEvent({ event: 'caseFinished', result });
 

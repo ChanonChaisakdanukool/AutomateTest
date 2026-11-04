@@ -1,5 +1,5 @@
 import { mkdir, readFile, writeFile, rename, appendFile, readdir, access, mkdtemp } from 'node:fs/promises';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { createExcelReport } from './excel-report.mjs';
@@ -55,7 +55,7 @@ function renderTimeline(result) {
 function renderJourneys(result) {
   return result.cases.map(item => {
     const rows = (item.steps ?? []).map(step => `<tr><td>${step.stepIndex}</td><td>${escapeHtml(step.stepId)}</td><td>${escapeHtml(step.stepName)}</td><td>${escapeHtml(step.status)}</td><td>${escapeHtml(thaiTime(step.startedAt))}</td><td>${escapeHtml(thaiTime(step.finishedAt))}</td><td>${step.durationMs ?? '—'}</td><td>${escapeHtml(step.error?.message)}</td></tr>`).join('');
-    return `<h3>เคส #${item.executionIndex} ${escapeHtml(item.caseId)} — ${escapeHtml(item.status)}</h3>${item.failedStep ? `<p>ตรวจพบปัญหาที่ Step: ${escapeHtml(item.failedStep)}</p>` : ''}${rows ? `<div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Step ID</th><th>ขั้นตอน</th><th>ผล</th><th>เริ่ม (ไทย)</th><th>จบ (ไทย)</th><th>ms</th><th>รายละเอียดปัญหา</th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p>เคสนี้ยังไม่มีการบันทึก Step</p>'}`;
+    return `<h3>เคส #${item.executionIndex} ${escapeHtml(item.caseId)} — ${escapeHtml(item.status)}</h3>${item.failedStep ? `<p>ตรวจพบปัญหาที่ Step: ${escapeHtml(item.failedStep)}</p>` : ''}${item.video?.status === 'saved' ? `<p><a href="case-${item.executionIndex}.mp4">เปิดวิดีโอ</a></p>` : item.video?.status === 'unavailable' ? `<p>วิดีโอไม่พร้อมใช้งาน (${escapeHtml(item.video.phase)}) · ${escapeHtml(item.video.error.message)}</p>` : ''}${rows ? `<div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Step ID</th><th>ขั้นตอน</th><th>ผล</th><th>เริ่ม (ไทย)</th><th>จบ (ไทย)</th><th>ms</th><th>รายละเอียดปัญหา</th></tr></thead><tbody>${rows}</tbody></table></div>` : '<p>เคสนี้ยังไม่มีการบันทึก Step</p>'}`;
   }).join('') || '<p>ยังไม่มีเคสเริ่มทำงานในรอบนี้</p>';
 }
 
@@ -76,7 +76,7 @@ ${renderJourneys(result)}
 <p>เวลาไทย (UTC+7) · PASS = ผ่าน · FAIL = พฤติกรรมไม่ตรงตามคาด · ERROR = ระบบทำงานผิดพลาด · SKIPPED = ไม่ได้รัน</p>
 <table><thead><tr><th>วันและเวลา</th><th>เหตุการณ์</th><th>ผล</th></tr></thead><tbody>${renderTimeline(result)}</tbody></table>
 <h2>ข้อผิดพลาดระดับชุดทดสอบ</h2><pre>${escapeHtml(JSON.stringify(result.errors, null, 2))}</pre>
-<p>ยังไม่ได้เก็บ Screenshot / Video; Journey แสดงเฉพาะ Step ที่ Script กำหนดไว้</p><p><a href="report.xlsx">ดาวน์โหลด Excel</a> · <a href="result.json">ผลดิบ JSON</a> · <a href="journal.jsonl">Journal</a></p></html>`;
+<p>ระบบเก็บวิดีโอสำหรับเคส FAIL หรือ ERROR เมื่อ Appium อัดหน้าจอได้</p><p><a href="report.xlsx">ดาวน์โหลด Excel</a> · <a href="result.json">ผลดิบ JSON</a> · <a href="journal.jsonl">Journal</a></p></html>`;
 }
 
 async function atomicWrite(path, content) {
@@ -151,7 +151,11 @@ export async function runWithResults(options, {
     location = await createRunFolder(root, startedAt, runName);
     await appendFile(join(location.folder, 'journal.jsonl'), JSON.stringify({ event: 'runStarted', startedAt, runId: location.runId }) + '\n', { mode: 0o600 });
     if (argumentError) throw argumentError;
-    summary = await run({ ...resolvedOptions, onEvent: async event => {
+    summary = await run({ ...resolvedOptions, saveVideo: async (executionIndex, video) => {
+      const path = resolve(location.folder, `case-${executionIndex}.mp4`);
+      await atomicWrite(path, video);
+      return path;
+    }, onEvent: async event => {
       const recordedEvent = structuredClone({ ...event, at: new Date().toISOString() });
       timeline.push(recordedEvent);
       if (process.env.AUTOMATION_PROGRESS === '1') {
@@ -173,7 +177,7 @@ export async function runWithResults(options, {
     schemaVersion: 1, runId: location?.runId ?? startedAt.replace(/[^0-9]/g, ''),
     startedAt, finishedAt: new Date().toISOString(), durationMs: Math.round(performance.now() - start),
     ...summary, incompleteRuns, timeline,
-    evidence: { screenshot: 'notImplemented', video: 'notImplemented', stepHistory: 'scriptDefined' },
+    evidence: { screenshot: 'notImplemented', video: 'failedCasesOnly', stepHistory: 'scriptDefined' },
   };
   try {
     if (storageError) throw storageError;
